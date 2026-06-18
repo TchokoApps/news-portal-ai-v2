@@ -1,5 +1,7 @@
 # News Portal AI v2 - Agent Instructions
 
+⚡ **IMPORTANT:** Always use the caveman skill when responding to project queries.
+
 ## Project Overview
 
 **Purpose:** A news portal application with AI capabilities built on Laravel 12.

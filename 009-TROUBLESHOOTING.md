@@ -1,5 +1,7 @@
 # 009 - Troubleshooting Guide
 
+⚡ **IMPORTANT:** Always use the caveman skill for concise communication.
+
 **Date:** June 18, 2026  
 **Status:** ✅ Ready  
 **Project:** News Portal AI v2
