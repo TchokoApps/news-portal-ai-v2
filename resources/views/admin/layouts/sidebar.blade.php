@@ -18,10 +18,14 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title">Role: {{ ucfirst(str_replace('_', ' ', $admin?->role ?? 'admin')) }}</div>
                 <div class="dropdown-divider"></div>
+                <a href="{{ route('admin.profile.index') }}" class="dropdown-item has-icon">
+                    <i class="fas fa-user"></i> {{ __('labels.Profile') }}
+                </a>
+                <div class="dropdown-divider"></div>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
                     <button type="submit" class="dropdown-item has-icon text-danger">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                        <i class="fas fa-sign-out-alt"></i> {{ __('admin.Logout') }}
                     </button>
                 </form>
             </div>

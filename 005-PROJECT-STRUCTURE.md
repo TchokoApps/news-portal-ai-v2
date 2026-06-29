@@ -29,14 +29,15 @@ news-portal-ai-v2/                          # Project root
 │   │   │   └── Admin/                      # Admin controllers
 │   │   │       ├── Auth/
 │   │   │       │   └── LoginController.php # Admin login/logout
-│   │   │       └── DashboardController.php # Admin dashboard
+│   │   │       ├── DashboardController.php # Admin dashboard
+│   │   │       └── ProfileController.php   # Admin profile management (✅ CREATED)
 │   │   │
 │   │   ├── Middleware/                     # HTTP middleware
 │   │   │   ├── Authenticate.php            # Auth redirect middleware
 │   │   │   └── AdminMiddleware.php         # Admin protection middleware
 │   │   │
 │   │   └── Requests/                       # Form request validation
-│   │       └── (future: StoreArticleRequest.php)
+│   │       └── AdminProfileUpdateRequest.php # Admin profile validation (✅ CREATED)
 │   │
 │   └── View/                               # View-related classes
 │       └── Components/                     # Blade view components
@@ -51,7 +52,7 @@ news-portal-ai-v2/                          # Project root
 │   │   └── AppServiceProvider.php          # App service binding
 │   │
 │   ├── Traits/                             # Reusable traits
-│   │   └── (future: Auditable.php, Sluggable.php)
+│   │   └── FileUploadTrait.php             # File upload handling (✅ CREATED)
 │   │
 │   ├── Exceptions/                         # Custom exceptions
 │   │   └── Handler.php                     # Exception handler

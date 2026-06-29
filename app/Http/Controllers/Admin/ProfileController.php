@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminProfileUpdateRequest;
 use App\Traits\FileUploadTrait;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
 {
@@ -35,14 +37,24 @@ class ProfileController extends Controller
             ? $this->uploadFile($request, 'profile_image', 'uploads/profiles', $admin->profile_image)
             : $admin->profile_image;
 
-        // Update admin profile
-        $admin->update([
+        // Prepare update data
+        $updateData = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'profile_image' => $profileImage,
-        ]);
+        ];
 
-        return redirect()->route('admin.profile.index')
-            ->with('success', __('messages.profile_updated_successfully'));
+        // Hash password if provided
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->input('password'));
+        }
+
+        // Update admin profile
+        $admin->update($updateData);
+
+        // Show SweetAlert toast notification
+        Alert::toast(__('messages.profile_updated_successfully'), 'success');
+
+        return redirect()->route('admin.profile.index');
     }
 }

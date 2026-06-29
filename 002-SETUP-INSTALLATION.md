@@ -159,6 +159,25 @@ This script automatically:
 - Installs npm dependencies
 - Builds frontend assets
 
+### Step 9: Install SweetAlert2 Package ✅
+
+**Install via Composer:**
+```bash
+php composer.phar require realrashid/sweet-alert
+```
+
+**Publish assets:**
+```bash
+php artisan vendor:publish --provider="RealRashid\SweetAlert\SweetAlertServiceProvider"
+```
+
+**Integration:**
+- Automatically included in `resources/views/admin/layouts/master.blade.php`
+- Shows toast notifications after profile updates
+- Profile management module already configured
+
+---
+
 ---
 
 ## Environment Configuration

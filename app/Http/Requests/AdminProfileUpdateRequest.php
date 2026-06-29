@@ -34,6 +34,7 @@ class AdminProfileUpdateRequest extends FormRequest
                 Rule::unique('admins', 'email')->ignore($adminId),
             ],
             'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ];
     }
 
@@ -53,6 +54,8 @@ class AdminProfileUpdateRequest extends FormRequest
             'profile_image.image' => __('validation.image', ['attribute' => 'Profile Image']),
             'profile_image.mimes' => __('validation.mimes', ['attribute' => 'Profile Image', 'values' => 'jpeg,png,jpg,gif']),
             'profile_image.max' => __('validation.max.file', ['attribute' => 'Profile Image', 'max' => '2MB']),
+            'password.min' => __('validation.min.string', ['attribute' => __('labels.Password'), 'min' => 8]),
+            'password.confirmed' => __('validation.confirmed', ['attribute' => __('labels.Password')]),
         ];
     }
 }

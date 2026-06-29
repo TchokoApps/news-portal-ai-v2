@@ -37,7 +37,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('profile.update', $admin->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.profile.update', $admin->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -107,6 +107,44 @@
                                 </div>
                             </div>
                         @endif
+
+                        <hr class="my-4">
+
+                        <h5>{{ __('labels.Change Password') }}</h5>
+                        <small class="form-text text-muted d-block mb-3">
+                            {{ __('labels.Ensure your account is using a long, random password to stay secure.') }}
+                        </small>
+
+                        <div class="form-group">
+                            <label for="password">{{ __('labels.New Password') }}</label>
+                            <input
+                                id="password"
+                                type="password"
+                                class="form-control @error('password') is-invalid @enderror"
+                                name="password"
+                                placeholder="{{ __('labels.Leave blank to keep current password') }}"
+                            >
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <small class="form-text text-muted">
+                                {{ __('messages.password_too_short') }}
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password_confirmation">{{ __('labels.Confirm New Password') }}</label>
+                            <input
+                                id="password_confirmation"
+                                type="password"
+                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                name="password_confirmation"
+                                placeholder="{{ __('labels.Confirm New Password') }}"
+                            >
+                            @error('password_confirmation')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">

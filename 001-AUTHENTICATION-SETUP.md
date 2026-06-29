@@ -750,6 +750,144 @@ npm run build  # Production build
 
 ---
 
+## Phase 3: Admin Profile Management ✅
+
+### Overview
+
+After completing admin authentication, the next phase adds **profile management** functionality allowing admins to:
+- View their profile information
+- Edit name and email
+- Upload a profile picture with automatic validation
+- Change their password securely
+- Receive SweetAlert toast notifications
+
+### Step 3.1: Create FileUploadTrait
+
+**File:** `app/Traits/FileUploadTrait.php`
+
+Reusable trait for handling file uploads with:
+- Random filename generation (20 characters)
+- Automatic directory creation
+- Old file deletion on replacement
+- Relative path return for database storage
+
+### Step 3.2: Create AdminProfileUpdateRequest
+
+**File:** `app/Http/Requests/AdminProfileUpdateRequest.php`
+
+**Validation Rules:**
+- `name`: Required, string, max 255
+- `email`: Required, email, unique (excluding current admin)
+- `profile_image`: Nullable, image, JPEG/PNG/JPG/GIF, max 2MB
+- `password`: Nullable, string, min 8, confirmed
+
+### Step 3.3: Create ProfileController
+
+**File:** `app/Http/Controllers/Admin/ProfileController.php`
+
+**Methods:**
+- `index()` - Display profile form with current admin data
+- `update(AdminProfileUpdateRequest $request)` - Process profile updates
+
+**Features:**
+- Uses FileUploadTrait for image handling
+- Hash facade for password hashing
+- SweetAlert toast notifications
+- Automatic old image deletion
+
+### Step 3.4: Add Profile Routes
+
+**File:** `routes/admin.php`
+
+```php
+Route::resource('admin-profile', ProfileController::class)
+    ->only(['index', 'update'])
+    ->names('admin.profile');
+```
+
+**Routes:**
+- `GET /admin/admin-profile` → Show profile form
+- `PUT /admin/admin-profile/{id}` → Save changes
+
+### Step 3.5: Integrate SweetAlert2
+
+**Installation:**
+```bash
+php composer.phar require realrashid/sweet-alert
+php artisan vendor:publish --provider="RealRashid\SweetAlert\SweetAlertServiceProvider"
+```
+
+**Master Layout:**
+- Add SweetAlert CSS & JS
+- Include `@include('sweetalert::alert')`
+
+**Controller:**
+```php
+Alert::toast(__('messages.profile_updated_successfully'), 'success');
+```
+
+### Step 3.6: Add Localization Keys
+
+New keys for password management:
+- `__('labels.Change Password')`
+- `__('labels.New Password')`
+- `__('labels.Confirm New Password')`
+- `__('labels.Leave blank to keep current password')`
+- `__('messages.profile_updated_successfully')`
+
+---
+
+## Admin Profile Module Testing
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| View profile | ✅ Pass | Shows current name, email, role |
+| Edit name/email | ✅ Pass | Updates database with validation |
+| Upload image | ✅ Pass | Stores in public/uploads/profiles/ |
+| Replace image | ✅ Pass | Deletes old image automatically |
+| Change password | ✅ Pass | Hashed with bcrypt, min 8 chars |
+| Toast notification | ✅ Pass | Shows success message after update |
+| Form validation | ✅ Pass | Email uniqueness, image type/size |
+| Profile link | ✅ Pass | Accessible from navbar dropdown |
+
+**Access URL:** http://localhost:8000/admin/admin-profile
+
+---
+
+## Summary
+
+The authentication system now provides:
+
+### User Authentication (Breeze)
+✅ Registration, login, logout  
+✅ Password reset & email verification  
+✅ Profile management  
+✅ Session-based authentication  
+
+### Admin Authentication (Custom)
+✅ Admin login/logout  
+✅ Multi-guard system  
+✅ 5 role levels  
+✅ Profile management with image upload  
+✅ Password change  
+✅ SweetAlert notifications  
+
+### Localization
+✅ 186 translation keys  
+✅ Multi-language ready  
+✅ All UI text localized  
+
+### Security
+✅ CSRF protection  
+✅ Password hashing (bcrypt)  
+✅ File upload validation  
+✅ Email uniqueness  
+✅ Role-based access control  
+
+**Status:** Production-ready ✅
+
+---
+
 ## Code Quality
 
 ### Run Pint Formatter

@@ -342,6 +342,266 @@ php artisan make:model Article -m
 php artisan make:model Article
 ```
 
+### Profile Image Upload Issues ✅
+
+**Issue: "Call to undefined method uploadFile()"**
+
+**Symptom:**
+```
+Call to undefined method uploadFile()
+```
+
+**Cause:** FileUploadTrait not imported in controller
+
+**Solution:**
+
+```php
+// ✅ Correct - add trait to controller
+namespace App\Http\Controllers\Admin;
+
+use App\Traits\FileUploadTrait;
+
+class ProfileController extends Controller
+{
+    use FileUploadTrait;  // Add this line
+    
+    public function update(Request $request)
+    {
+        $path = $this->uploadFile($request, 'profile_image', 'profiles');
+        // ...
+    }
+}
+```
+
+---
+
+**Issue: "Permission denied" when uploading profile image**
+
+**Symptom:**
+```
+permission denied: public/uploads/profiles/
+```
+
+**Cause:** Upload directory not writable by web server
+
+**Solution:**
+
+```bash
+# Create directory
+mkdir -p public/uploads/profiles
+
+# Fix permissions (Linux/Mac)
+chmod 755 public/uploads
+chmod 755 public/uploads/profiles
+
+# Set web server ownership (Ubuntu/Linux)
+sudo chown -R www-data:www-data public/uploads
+
+# Test with artisan
+php artisan storage:link  # If using storage symlink
+```
+
+---
+
+**Issue: "MIME type validation failed" for profile image**
+
+**Symptom:**
+```
+The profile_image must be an image.
+```
+
+**Cause:** File MIME type not recognized or file corrupted
+
+**Solution:**
+
+```php
+// In form request
+'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+
+// Valid uploads:
+// - JPEG, PNG, JPG, GIF
+// - Max 2MB
+// - Must be actual image file
+
+// ❌ Invalid:
+// - PDF, Word, Excel files
+// - Corrupted images
+// - Files renamed with wrong extension
+```
+
+**Test with Tinker:**
+```php
+php artisan tinker
+>>> $admin = Admin::find(1)
+>>> Storage::disk('public')->exists($admin->profile_image)
+# Should return true if file exists
+```
+
+---
+
+**Issue: "Profile image not displaying after upload"**
+
+**Symptom:**
+- Image uploaded successfully
+- Database shows path
+- But image doesn't appear on page
+
+**Solution:**
+
+1. **Check storage link:**
+   ```bash
+   # Create symlink if missing
+   php artisan storage:link
+   
+   # Verify symlink exists
+   ls -la public/storage
+   # Should show: storage -> ../storage/app/public
+   ```
+
+2. **Use correct image path in view:**
+   ```blade
+   <!-- ❌ Wrong -->
+   <img src="{{ $admin->profile_image }}" alt="Profile">
+   
+   <!-- ✅ Correct if using storage symlink -->
+   <img src="{{ asset('storage/' . $admin->profile_image) }}" alt="Profile">
+   
+   <!-- ✅ Or direct path -->
+   <img src="{{ asset('uploads/profiles/' . basename($admin->profile_image)) }}" alt="Profile">
+   ```
+
+3. **Check file exists:**
+   ```bash
+   ls -la public/uploads/profiles/
+   # Should show uploaded files
+   ```
+
+---
+
+**Issue: "Validation error for email uniqueness"**
+
+**Symptom:**
+```
+The email has already been taken.
+```
+
+**Cause:** Email already used by another admin (or during testing)
+
+**Solution:**
+
+```php
+// In FormRequest, email uniqueness ignores current admin
+'email' => [
+    'required',
+    'email',
+    Rule::unique('admins')->ignore($this->user('admin')->id),
+]
+
+// This allows changing email to same value
+// But rejects duplicate for different admins
+
+// Test with Tinker:
+php artisan tinker
+>>> $admin1 = Admin::find(1)
+>>> $admin2 = Admin::find(2)
+>>> $admin1->email  // "admin1@test.com"
+>>> $admin2->email  // "admin2@test.com"
+# Updating admin1 email to admin2 email should fail
+```
+
+---
+
+**Issue: "SweetAlert toast notification not showing"**
+
+**Symptom:**
+- Form submits successfully
+- But no toast notification appears
+
+**Cause:** SweetAlert not included in master layout
+
+**Solution:**
+
+```blade
+<!-- In resources/views/admin/layouts/master.blade.php -->
+
+<!-- ✅ Add these before closing </head> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.min.css">
+
+<!-- Add before closing </body> -->
+@include('sweetalert::alert')
+```
+
+**Or install package:**
+```bash
+php composer.phar require realrashid/sweet-alert
+php artisan vendor:publish --provider="RealRashid\SweetAlert\SweetAlertServiceProvider"
+```
+
+---
+
+**Issue: "Password change not working"**
+
+**Symptom:**
+- Password form submits
+- But old password still works
+
+**Cause:** Password not hashed or update failed silently
+
+**Solution:**
+
+```php
+// In ProfileController::update()
+use Illuminate\Support\Facades\Hash;
+
+if ($request->filled('password')) {
+    // ✅ Correct - hash password
+    $updateData['password'] = Hash::make($request->input('password'));
+}
+
+// Test with Tinker:
+php artisan tinker
+>>> $admin = Admin::find(1)
+>>> Hash::check('NewPassword123', $admin->password)
+# Should return true after update
+```
+
+---
+
+**Issue: "404 when accessing /admin/admin-profile"**
+
+**Symptom:**
+```
+404 | Not Found
+```
+
+**Cause:** Route not registered or admin not authenticated
+
+**Solution:**
+
+1. **Check route exists:**
+   ```bash
+   php artisan route:list | grep admin-profile
+   # Should show:
+   # GET|HEAD admin/admin-profile admin.profile.index
+   # PUT|PATCH admin/admin-profile/{id} admin.profile.update
+   ```
+
+2. **Check authentication:**
+   ```bash
+   # Try accessing with admin authenticated
+   # Should show profile form (200)
+   # Without auth: should redirect to /admin/login (302)
+   ```
+
+3. **Verify route file:**
+   ```php
+   // routes/admin.php should contain:
+   Route::resource('admin-profile', ProfileController::class)
+       ->only(['index', 'update'])
+       ->names('admin.profile');
+   ```
+
 ---
 
 ### Vite Assets Not Loading (404)

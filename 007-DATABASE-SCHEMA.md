@@ -108,6 +108,7 @@ CREATE TABLE admins (
     email_verified_at timestamp NULL,
     password varchar(255) NOT NULL,
     role enum('super_admin','admin','editor','writer','publisher') DEFAULT 'writer',
+    profile_image varchar(255) NULL,
     remember_token varchar(100) NULL,
     created_at timestamp NULL,
     updated_at timestamp NULL
@@ -124,6 +125,7 @@ CREATE TABLE admins (
 | email_verified_at | timestamp | Yes | - | Email verification timestamp |
 | password | varchar(255) | No | - | Hashed password (bcrypt) |
 | role | enum | No | 'writer' | Admin role/permission level |
+| profile_image | varchar(255) | Yes | - | Path to profile image (✅ ADDED) |
 | remember_token | varchar(100) | Yes | - | "Remember me" token |
 | created_at | timestamp | Yes | - | Record creation time |
 | updated_at | timestamp | Yes | - | Last update time |

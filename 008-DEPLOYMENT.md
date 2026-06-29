@@ -510,6 +510,35 @@ gzip_types text/plain text/css application/json application/javascript text/xml 
 gzip_min_length 1000;
 ```
 
+### File Permissions ✅
+
+**Directory Permissions for Profile Upload:**
+
+```bash
+# Create upload directory
+mkdir -p public/uploads/profiles
+
+# Set proper permissions
+chmod 755 public/uploads
+chmod 755 public/uploads/profiles
+
+# Set web server user ownership (Ubuntu/Linux)
+sudo chown -R www-data:www-data public/uploads
+sudo chown -R www-data:www-data storage
+
+# Allow Laravel to write to directories
+chmod 775 storage
+chmod 775 bootstrap/cache
+chmod 775 public/uploads/profiles
+```
+
+**Production Checklist:**
+- ✅ `storage/` writable by web server
+- ✅ `bootstrap/cache/` writable by web server
+- ✅ `public/uploads/profiles/` writable by web server (for profile images)
+- ✅ `.env` file readable only by web server (not world-readable)
+- ✅ `config/` directory not world-writable
+
 ### Database Optimization
 
 ```php

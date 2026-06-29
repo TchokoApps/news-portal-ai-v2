@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/css/components.css') }}">
 
     @stack('styles')
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
 <div id="app">
@@ -57,6 +60,12 @@
 <!-- Template JS File -->
 <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
 <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+<!-- Include SweetAlert Alert Notifications -->
+@include('sweetalert::alert')
 
 @stack('scripts')
 </body>

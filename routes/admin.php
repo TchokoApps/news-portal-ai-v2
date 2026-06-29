@@ -26,7 +26,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Admin Profile Routes
-    Route::resource('profile', ProfileController::class)->only(['index', 'update']);
+    Route::resource('admin-profile', ProfileController::class)->only(['index', 'update'])->names('admin.profile');
 
     // Stub routes for sidebar testing
     Route::get('/articles', function () {

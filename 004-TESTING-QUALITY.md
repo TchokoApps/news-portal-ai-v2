@@ -262,6 +262,126 @@ public function test_unauthenticated_admin_redirects_to_admin_login()
 }
 ```
 
+### Test Admin Profile Management ✅
+
+```php
+// tests/Feature/Admin/AdminProfileTest.php
+namespace Tests\Feature\Admin;
+
+use App\Models\Admin;
+use Tests\TestCase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
+class AdminProfileTest extends TestCase
+{
+    protected $admin;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Storage::fake('public');
+        $this->admin = Admin::factory()->superAdmin()->create();
+    }
+
+    public function test_admin_can_view_profile()
+    {
+        $response = $this->actingAs($this->admin, 'admin')
+            ->get('/admin/admin-profile');
+        
+        $response->assertStatus(200);
+        $response->assertSee($this->admin->name);
+        $response->assertSee($this->admin->email);
+    }
+
+    public function test_admin_can_update_name()
+    {
+        $response = $this->actingAs($this->admin, 'admin')
+            ->put('/admin/admin-profile/' . $this->admin->id, [
+                'name' => 'Updated Name',
+                'email' => $this->admin->email,
+            ]);
+        
+        $response->assertRedirect('/admin/admin-profile');
+        $this->admin->refresh();
+        $this->assertEquals('Updated Name', $this->admin->name);
+    }
+
+    public function test_admin_can_upload_profile_image()
+    {
+        $file = UploadedFile::fake()->image('profile.jpg');
+        
+        $response = $this->actingAs($this->admin, 'admin')
+            ->put('/admin/admin-profile/' . $this->admin->id, [
+                'name' => $this->admin->name,
+                'email' => $this->admin->email,
+                'profile_image' => $file,
+            ]);
+        
+        $response->assertRedirect('/admin/admin-profile');
+        $this->admin->refresh();
+        $this->assertNotNull($this->admin->profile_image);
+        Storage::disk('public')->assertExists($this->admin->profile_image);
+    }
+
+    public function test_admin_can_change_password()
+    {
+        $response = $this->actingAs($this->admin, 'admin')
+            ->put('/admin/admin-profile/' . $this->admin->id, [
+                'name' => $this->admin->name,
+                'email' => $this->admin->email,
+                'password' => 'NewPassword123',
+                'password_confirmation' => 'NewPassword123',
+            ]);
+        
+        $response->assertRedirect('/admin/admin-profile');
+        $this->admin->refresh();
+        $this->assertTrue(Hash::check('NewPassword123', $this->admin->password));
+    }
+
+    public function test_password_change_validation()
+    {
+        // Password too short
+        $response = $this->actingAs($this->admin, 'admin')
+            ->put('/admin/admin-profile/' . $this->admin->id, [
+                'name' => $this->admin->name,
+                'email' => $this->admin->email,
+                'password' => 'short',
+                'password_confirmation' => 'short',
+            ]);
+        
+        $response->assertSessionHasErrors('password');
+    }
+
+    public function test_email_uniqueness_validation()
+    {
+        $otherAdmin = Admin::factory()->create(['email' => 'other@test.com']);
+        
+        $response = $this->actingAs($this->admin, 'admin')
+            ->put('/admin/admin-profile/' . $this->admin->id, [
+                'name' => $this->admin->name,
+                'email' => $otherAdmin->email,
+            ]);
+        
+        $response->assertSessionHasErrors('email');
+    }
+
+    public function test_profile_image_validation()
+    {
+        $file = UploadedFile::fake()->create('document.pdf', 5000);
+        
+        $response = $this->actingAs($this->admin, 'admin')
+            ->put('/admin/admin-profile/' . $this->admin->id, [
+                'name' => $this->admin->name,
+                'email' => $this->admin->email,
+                'profile_image' => $file,
+            ]);
+        
+        $response->assertSessionHasErrors('profile_image');
+    }
+}
+```
+
 ### HTTP Assertion Methods
 
 ```php

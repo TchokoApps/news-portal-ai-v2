@@ -542,6 +542,98 @@ class ArticleTest extends TestCase
 }
 ```
 
+### 10. Using Traits for Reusable Logic ✅
+
+Traits allow you to share functionality across multiple controllers and models.
+
+**Creating a Trait:**
+```php
+// app/Traits/FileUploadTrait.php
+trait FileUploadTrait
+{
+    protected function uploadFile($request, $fieldName, $uploadDir, $oldPath = null)
+    {
+        if (!$request->hasFile($fieldName)) {
+            return null;
+        }
+        
+        $file = $request->file($fieldName);
+        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+        
+        // Delete old file
+        if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+            Storage::disk('public')->delete($oldPath);
+        }
+        
+        // Store new file
+        return $file->storeAs($uploadDir, $fileName, 'public');
+    }
+}
+```
+
+**Using the Trait:**
+```php
+// app/Http/Controllers/Admin/ProfileController.php
+class ProfileController extends Controller
+{
+    use FileUploadTrait;
+    
+    public function update(Request $request)
+    {
+        $path = $this->uploadFile($request, 'profile_image', 'profiles', $admin->profile_image);
+        $admin->update(['profile_image' => $path]);
+    }
+}
+```
+
+### 11. Using Form Requests for Validation ✅
+
+Form Requests centralize validation logic and keep controllers clean.
+
+**Creating a Form Request:**
+```php
+// app/Http/Requests/AdminProfileUpdateRequest.php
+class AdminProfileUpdateRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return $this->user('admin') instanceof Admin;
+    }
+    
+    public function rules()
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('admins')->ignore($this->user('admin')->id),
+            ],
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'password' => 'nullable|string|min:8|confirmed',
+        ];
+    }
+    
+    public function messages()
+    {
+        return [
+            'name.required' => __('validation.required', ['attribute' => 'Name']),
+            'profile_image.max' => __('validation.max.file'),
+        ];
+    }
+}
+```
+
+**Using in Controller:**
+```php
+// Type-hints automatically validate and cast
+public function update(AdminProfileUpdateRequest $request)
+{
+    // $request->validated() contains only validated fields
+    $admin->update($request->validated());
+}
+```
+
 ---
 
 ## Database Operations

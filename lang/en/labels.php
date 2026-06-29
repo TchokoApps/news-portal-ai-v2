@@ -37,6 +37,7 @@ return [
     'Account Settings' => 'Account Settings',
     'Change Password' => 'Change Password',
     'Update Password' => 'Update Password',
+    'Leave blank to keep current password' => 'Leave blank to keep current password',
     'Ensure your account is using a long, random password to stay secure.' => 'Ensure your account is using a long, random password to stay secure.',
     'Delete Account' => 'Delete Account',
     'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.' => 'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.',

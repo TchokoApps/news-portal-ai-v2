@@ -385,6 +385,87 @@ Route::middleware(['auth:admin'])->group(function () {
 
 ---
 
+### Admin Profile Management ✅
+
+**Route Definition:**
+```php
+// routes/admin.php
+Route::middleware(['auth:admin'])->group(function () {
+    Route::resource('admin-profile', ProfileController::class)
+        ->only(['index', 'update'])
+        ->names('admin.profile');
+});
+```
+
+#### Get Profile Form
+
+**Endpoint:**
+
+| Method | URI | Name | Controller | Middleware |
+|--------|-----|------|-----------|------------|
+| GET | /admin/admin-profile | admin.profile.index | Admin\ProfileController@index | auth:admin |
+
+**Response:** HTML form with:
+- Pre-filled name field
+- Pre-filled email field
+- Profile image upload with preview
+- Current profile image display (if exists)
+- Password change section (optional)
+- Save and Cancel buttons
+
+**Accessible from:** Navbar dropdown menu → Profile link
+
+#### Update Profile
+
+**Endpoint:**
+
+| Method | URI | Name | Controller | Middleware |
+|--------|-----|------|-----------|------------|
+| PUT | /admin/admin-profile/{id} | admin.profile.update | Admin\ProfileController@update | auth:admin |
+
+**Request Body (multipart/form-data):**
+```json
+{
+    "_token": "csrf_token",
+    "_method": "PUT",
+    "name": "Updated Admin Name",
+    "email": "newemail@example.com",
+    "profile_image": "<file>",
+    "password": "NewPassword123",
+    "password_confirmation": "NewPassword123"
+}
+```
+
+**Validation Rules:**
+- `name` - Required, string, max 255
+- `email` - Required, email, unique (excluding current admin)
+- `profile_image` - Optional, image, JPEG/PNG/JPG/GIF, max 2MB
+- `password` - Optional, min 8 chars, confirmed
+
+**Response:**
+- Success: Redirect to profile page + SweetAlert toast "Profile updated successfully!"
+- Error: Redirect back with validation errors
+
+**Features:**
+- ✅ Profile image upload with automatic validation
+- ✅ Old image automatic deletion
+- ✅ Password hashing with bcrypt
+- ✅ Email uniqueness check
+- ✅ SweetAlert2 toast notifications
+- ✅ Optional password change (leave blank to keep current)
+- ✅ Fully localized
+
+**Test:**
+```bash
+# Navigate to profile
+http://localhost:8000/admin/admin-profile
+
+# Edit profile & submit form
+# Expected: Toast notification + page reload with updated data
+```
+
+---
+
 ### Admin Management Routes (Stubs)
 
 Dynamic sidebar menu with active state based on current route.
