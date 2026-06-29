@@ -1,0 +1,35 @@
+<?php
+
+return [
+
+    'Save' => 'Save',
+    'Update' => 'Update',
+    'Delete' => 'Delete',
+    'Cancel' => 'Cancel',
+    'Submit' => 'Submit',
+    'Create' => 'Create',
+    'Edit' => 'Edit',
+    'View' => 'View',
+    'Login' => 'Login',
+    'Register' => 'Register',
+    'Log Out' => 'Log Out',
+    'Logout' => 'Logout',
+    'Search' => 'Search',
+    'Filter' => 'Filter',
+    'Reset' => 'Reset',
+    'Back' => 'Back',
+    'Next' => 'Next',
+    'Previous' => 'Previous',
+    'Confirm' => 'Confirm',
+    'Yes' => 'Yes',
+    'No' => 'No',
+    'Ok' => 'OK',
+    'Close' => 'Close',
+    'Save Changes' => 'Save Changes',
+    'Send' => 'Send',
+    'Download' => 'Download',
+    'Upload' => 'Upload',
+    'Export' => 'Export',
+    'Import' => 'Import',
+
+];

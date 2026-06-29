@@ -1,10 +1,10 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Admin Dashboard')
+@section('title', __('admin.Admin Dashboard'))
 
 @section('content')
     <div class="section-header">
-        <h1>Dashboard</h1>
+        <h1>{{ __('admin.Dashboard') }}</h1>
     </div>
 
     <div class="row">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Admin Name</h4>
+                        <h4>{{ __('admin.Admin Name') }}</h4>
                     </div>
                     <div class="card-body">
                         {{ $admin->name }}
@@ -30,7 +30,7 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Email</h4>
+                        <h4>{{ __('labels.Email') }}</h4>
                     </div>
                     <div class="card-body">
                         {{ $admin->email }}
@@ -45,7 +45,7 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Role</h4>
+                        <h4>{{ __('admin.Role') }}</h4>
                     </div>
                     <div class="card-body">
                         {{ ucfirst(str_replace('_', ' ', $admin->role)) }}

@@ -1,16 +1,24 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
+use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest:admin')->group(function () {
+Route::middleware('guest.admin')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('admin.login');
     Route::post('/login', [LoginController::class, 'store'])->name('admin.login.store');
 
     Route::get('/register', [RegisterController::class, 'create'])->name('admin.register');
     Route::post('/register', [RegisterController::class, 'store'])->name('admin.register.store');
+
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])->name('admin.forgot-password');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->name('admin.forgot-password.store');
+
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'create'])->name('admin.reset-password.create');
+    Route::post('/reset-password', [ResetPasswordController::class, 'store'])->name('admin.reset-password.store');
 });
 
 Route::middleware(['auth:admin'])->group(function () {
