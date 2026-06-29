@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest.admin')->group(function () {
@@ -23,6 +24,9 @@ Route::middleware('guest.admin')->group(function () {
 
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Admin Profile Routes
+    Route::resource('profile', ProfileController::class)->only(['index', 'update']);
 
     // Stub routes for sidebar testing
     Route::get('/articles', function () {

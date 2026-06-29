@@ -19,9 +19,15 @@ return [
     'Admin Name' => 'Admin Name',
     'Role' => 'Role',
 
+    // Profile
+    'Profile' => 'Profile',
+    'Profile Image' => 'Profile Image',
+    'Current Profile Image' => 'Current Profile Image',
+    'Allowed formats' => 'Allowed formats',
+    'Max size' => 'Max size',
+
     // Navigation
     'Admin' => 'Admin',
-    'Profile' => 'Profile',
     'Settings' => 'Settings',
     'Logout' => 'Logout',
     'Log Out' => 'Log Out',
