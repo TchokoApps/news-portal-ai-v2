@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Admin Register</title>
+
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/bootstrap-social/bootstrap-social.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/components.css') }}">
+</head>
+<body>
+<div id="app">
+    <section class="section">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-5 offset-lg-3 col-xl-4 offset-xl-4">
+                    <div class="login-brand">
+                        <img src="{{ asset('admin/assets/img/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
+                    </div>
+
+                    <div class="card card-primary">
+                        <div class="card-header"><h4>Admin Register</h4></div>
+
+                        <div class="card-body">
+                            @if (session('status'))
+                                <div class="alert alert-success">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('admin.register.store') }}">
+                                @csrf
+
+                                <div class="form-group">
+                                    <label for="name">Full Name</label>
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus autocomplete="name">
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="username">
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password" class="control-label">Password</label>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <small class="form-text text-muted">
+                                        Password must be at least 8 characters long and contain uppercase, lowercase, and numbers.
+                                    </small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password_confirmation" class="control-label">Confirm Password</label>
+                                    <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password">
+                                    @error('password_confirmation')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                        Register
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="text-center mt-3">
+                                Already have an account?
+                                <a href="{{ route('admin.login') }}" class="text-small">Login here</a>
+                            </div>
+
+                            <div class="text-center mt-2">
+                                <a href="{{ url('/') }}" class="text-small">Back to Home</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="simple-footer">
+                        Copyright &copy; {{ now()->year }} News Portal AI
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="{{ asset('admin/assets/modules/jquery.min.js') }}"></script>
+<script src="{{ asset('admin/assets/modules/popper.js') }}"></script>
+<script src="{{ asset('admin/assets/modules/tooltip.js') }}"></script>
+<script src="{{ asset('admin/assets/modules/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('admin/assets/modules/nicescroll/jquery.nicescroll.min.js') }}"></script>
+<script src="{{ asset('admin/assets/modules/moment.min.js') }}"></script>
+<script src="{{ asset('admin/assets/js/stisla.js') }}"></script>
+<script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
+<script src="{{ asset('admin/assets/js/custom.js') }}"></script>
+</body>
+</html>

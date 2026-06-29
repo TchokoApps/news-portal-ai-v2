@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:admin')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('admin.login');
     Route::post('/login', [LoginController::class, 'store'])->name('admin.login.store');
+
+    Route::get('/register', [RegisterController::class, 'create'])->name('admin.register');
+    Route::post('/register', [RegisterController::class, 'store'])->name('admin.register.store');
 });
 
 Route::middleware(['auth:admin'])->group(function () {
