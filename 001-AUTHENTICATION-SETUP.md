@@ -643,6 +643,69 @@ resources/views/admin/auth/
 
 ---
 
+## Admin Panel UI (Stisla Template)
+
+### Login Page
+
+**Location:** `resources/views/admin/auth/login.blade.php`
+
+Uses **Stisla Bootstrap template** styled form with Laravel validation:
+- Email field with @error validation  
+- Password field with @error validation
+- Remember me checkbox
+- CSRF token protection
+- Form submits to `route('admin.login.store')`
+
+**Styling:**
+- Bootstrap 4 grid system
+- Stisla CSS at `public/admin/assets/css/style.css`
+- Responsive mobile design
+
+### Dashboard & Layout System
+
+**Master Layout:** `resources/views/admin/layouts/master.blade.php`
+- Complete HTML structure with Stisla theme
+- Includes navbar + sidebar partial
+- CSS/JS from `public/admin/assets/`
+- Main content placeholder: `@yield('content')`
+
+**Sidebar Component:** `resources/views/admin/layouts/sidebar.blade.php`
+- Top navbar with user dropdown
+- Collapsible left sidebar menu
+- Dynamic active state using `request()->routeIs()`
+- Logout form with CSRF token
+
+**Example page structure:**
+```blade
+@extends('admin.layouts.master')
+@section('title', 'Page Title')
+@section('content')
+    <!-- Page content -->
+@endsection
+```
+
+### Admin Assets
+
+All referenced via Laravel `asset()` helper:
+
+**CSS:**
+- `public/admin/assets/css/style.css` - Main Stisla theme
+- `public/admin/assets/css/components.css` - Component styles
+
+**JavaScript:**
+- `public/admin/assets/js/stisla.js` - Theme functionality
+- `public/admin/assets/modules/jquery/jquery.min.js` - jQuery
+- `public/admin/assets/modules/bootstrap/js/bootstrap.min.js` - Bootstrap JS
+
+**Modules & Libraries:**
+- jQuery - DOM manipulation
+- Bootstrap 4 - Grid/components
+- FontAwesome - Icons
+- Summernote - Rich text editor
+- Chart.js - Data visualization
+
+---
+
 ## Environment Configuration
 
 ### Required .env Variables

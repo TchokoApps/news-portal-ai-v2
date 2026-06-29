@@ -14,7 +14,7 @@ class DashboardController extends Controller
     {
         $admin = Auth::guard('admin')->user();
 
-        return view('admin.dashboard', [
+        return view('admin.dashboard.index', [
             'admin' => $admin,
         ]);
     }

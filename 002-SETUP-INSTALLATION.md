@@ -545,6 +545,13 @@ npm run dev
 
 Then visit: `http://127.0.0.1:8000`
 
+**Admin Panel Access:**
+```
+Login: http://127.0.0.1:8000/admin/login
+Email: superadmin@newsportal.local
+Password: password123
+```
+
 ### Using Setup Script
 
 ```bash

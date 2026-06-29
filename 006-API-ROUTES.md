@@ -385,6 +385,53 @@ Route::middleware(['auth:admin'])->group(function () {
 
 ---
 
+### Admin Management Routes (Stubs)
+
+Dynamic sidebar menu with active state based on current route.
+
+**Route Definitions:**
+```php
+// routes/admin.php
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/articles', fn() => view('admin.articles.index'))
+        ->name('admin.articles.index');
+    
+    Route::get('/users', fn() => view('admin.users.index'))
+        ->name('admin.users.index');
+    
+    Route::get('/roles', fn() => view('admin.roles.index'))
+        ->name('admin.roles.index');
+    
+    Route::get('/settings', fn() => view('admin.settings.index'))
+        ->name('admin.settings.index');
+});
+```
+
+**Routes:**
+
+| Method | URI | Name | View |
+|--------|-----|------|------|
+| GET | /admin/articles | admin.articles.index | admin.articles.index |
+| GET | /admin/users | admin.users.index | admin.users.index |
+| GET | /admin/roles | admin.roles.index | admin.roles.index |
+| GET | /admin/settings | admin.settings.index | admin.settings.index |
+
+**Sidebar Active State:**
+Dynamic active highlighting using `request()->routeIs()`:
+```blade
+<li @class(['active' => request()->routeIs('admin.articles.*')])>
+    <a href="{{ route('admin.articles.index') }}">Articles</a>
+</li>
+```
+
+- Visit `/admin/dashboard` → "Dashboard" menu highlighted
+- Visit `/admin/articles` → "Articles" menu highlighted
+- Visit `/admin/users` → "Users" menu highlighted
+- Visit `/admin/roles` → "Roles" menu highlighted
+- Visit `/admin/settings` → "Settings" menu highlighted
+
+---
+
 ## Protected Routes
 
 ### Authentication Middleware

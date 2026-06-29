@@ -38,6 +38,10 @@ news-portal-ai-v2/                          # Project root
 │   │   └── Requests/                       # Form request validation
 │   │       └── (future: StoreArticleRequest.php)
 │   │
+│   └── View/                               # View-related classes
+│       └── Components/                     # Blade view components
+│           └── (future: PaginationComponent.php)
+│   │
 │   ├── Models/                             # Eloquent models
 │   │   ├── User.php                        # User model (Breeze)
 │   │   ├── Admin.php                       # Admin model
@@ -95,6 +99,24 @@ news-portal-ai-v2/                          # Project root
 │   ├── index.php                           # Application entry point
 │   ├── robots.txt                          # SEO robots directives
 │   ├── .htaccess                           # Apache configuration
+│   ├── admin/                              # Admin panel assets (Stisla)
+│   │   └── assets/
+│   │       ├── modules/                    # Stisla libraries
+│   │       │   ├── bootstrap/
+│   │       │   ├── fontawesome/
+│   │       │   ├── summernote/
+│   │       │   ├── chart/
+│   │       │   └── jquery*
+│   │       ├── css/                        # Stisla stylesheets
+│   │       │   ├── style.css
+│   │       │   └── components.css
+│   │       ├── js/                         # Stisla scripts
+│   │       │   ├── stisla.js
+│   │       │   ├── scripts.js
+│   │       │   └── custom.js
+│   │       ├── img/                        # Images & avatars
+│   │       │   └── avatar/
+│   │       └── fonts/                      # Web fonts
 │   ├── build/                              # Compiled frontend assets (Vite output)
 │   │   ├── assets/
 │   │   │   ├── app-[hash].css              # Compiled Tailwind CSS
@@ -401,6 +423,115 @@ PHPUnit test runner configuration.
 - Feature tests: `[Feature]Test.php` - `ArticleTest.php`
 - Unit tests: `[Class]Test.php` - `UserTest.php`
 - Method names: `test_` prefix - `test_user_can_create_article()`
+
+---
+
+## Admin Panel (Stisla Integration)
+
+### Overview
+
+Admin panel built with **Stisla** Bootstrap template. Uses Laravel Blade layout system to avoid code duplication.
+
+**Structure:**
+- Master layout: `resources/views/admin/layouts/master.blade.php`
+- Navbar + Sidebar: `resources/views/admin/layouts/sidebar.blade.php` (included in master)
+- Page views extend master layout
+- Assets served from `public/admin/assets/` via `asset()` helper
+
+### Master Layout System
+
+**File:** `resources/views/admin/layouts/master.blade.php`
+
+Contains:
+- HTML structure + DOCTYPE
+- `<head>` - meta tags + Stisla CSS/JS includes via `asset()`
+- Navbar + sidebar partial via `@include('admin.layouts.sidebar')`
+- Main content slot: `@yield('content')`
+- Footer
+- `@stack('styles')` / `@stack('scripts')` for per-page customization
+
+**Example usage in page:**
+```blade
+@extends('admin.layouts.master')
+@section('title', 'Page Title')
+@section('content')
+    <!-- Page content here -->
+@endsection
+```
+
+### Sidebar & Navigation
+
+**File:** `resources/views/admin/layouts/sidebar.blade.php`
+
+- Top navbar with dropdown (profile, logout)
+- Collapsible sidebar with menu items
+- Dynamic `active` class using `request()->routeIs()`
+- Brand logo + icon
+
+**Active state example:**
+```blade
+<li @class(['active' => request()->routeIs('admin.articles.*')])>
+    <a href="{{ route('admin.articles.index') }}">Articles</a>
+</li>
+```
+
+### Admin Views
+
+```
+resources/views/admin/
+├── layouts/
+│   ├── master.blade.php      # Layout wrapper
+│   └── sidebar.blade.php     # Navbar + sidebar
+├── dashboard/
+│   └── index.blade.php       # Dashboard page
+├── articles/
+│   └── index.blade.php       # Articles stub
+├── users/
+│   └── index.blade.php       # Users stub
+├── roles/
+│   └── index.blade.php       # Roles stub
+├── settings/
+│   └── index.blade.php       # Settings stub
+└── auth/
+    └── login.blade.php       # Login page (Stisla UI)
+```
+
+### Admin Routes
+
+**File:** `routes/admin.php`
+
+```php
+// Auth routes (guest)
+Route::get('/login', [LoginController::class, 'create'])->name('admin.login');
+Route::post('/login', [LoginController::class, 'store'])->name('admin.login.store');
+
+// Protected routes (auth:admin middleware)
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('/articles', ...)->name('admin.articles.index');
+Route::get('/users', ...)->name('admin.users.index');
+Route::get('/roles', ...)->name('admin.roles.index');
+Route::get('/settings', ...)->name('admin.settings.index');
+Route::post('/logout', [LoginController::class, 'destroy'])->name('admin.logout');
+```
+
+### Admin Assets
+
+All assets referenced via `asset('admin/assets/...')`:
+
+- CSS: `public/admin/assets/css/style.css`, `components.css`
+- JS: `public/admin/assets/js/stisla.js`, `scripts.js`
+- Modules: jQuery, Bootstrap, FontAwesome, Summernote, Chart.js
+- Images: `public/admin/assets/img/avatar/`, etc.
+
+### Admin Template Reference
+
+Original Stisla HTML templates copied to `resources/views/admin-template/` for permanent reference:
+- `index.html` - main dashboard example
+- `auth-login.html` - login page
+- `auth-register.html` - register page
+- `assets/` - all original template assets
+
+Use when copying new component HTML snippets into Blade pages.
 
 ---
 

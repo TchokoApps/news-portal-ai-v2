@@ -636,6 +636,107 @@ php artisan tinker
 
 ---
 
+## Admin Panel UI Issues
+
+### Admin Dashboard CSS/JS Not Loading
+
+**Symptom:**
+- Admin dashboard displays unstyled (plain HTML)
+- Sidebar doesn't work or looks broken
+- "Network" tab shows 404 for CSS/JS files
+
+**Cause:** Stisla assets folder missing or incorrect path
+
+**Solution:**
+
+1. **Verify assets folder exists:**
+   ```bash
+   ls -la public/admin/assets/
+   # Should show: css/, js/, modules/, img/, fonts/
+   ```
+
+2. **If missing, copy from reference:**
+   ```bash
+   # Admin template should exist at:
+   ls -la resources/views/admin-template/assets/
+   
+   # If not, manually copy assets
+   cp -r resources/views/admin-template/assets/* public/admin/assets/
+   ```
+
+3. **Verify asset() helper URLs work:**
+   Open browser DevTools (F12) → Network tab
+   - ✅ `/public/admin/assets/css/style.css` - 200 OK
+   - ✅ `/public/admin/assets/js/stisla.js` - 200 OK
+
+4. **Check file permissions:**
+   ```bash
+   chmod -R 755 public/admin/assets/
+   ```
+
+### Sidebar Menu Not Highlighting Active Page
+
+**Symptom:**
+- Click /admin/articles → "Articles" menu should highlight but doesn't
+- Active class not applied to current menu item
+
+**Cause:** Route name mismatch or @class directive issue
+
+**Solution:**
+
+1. **Verify route names:**
+   ```bash
+   php artisan route:list --name=admin
+   # Should show: admin.dashboard, admin.articles.index, admin.users.index, etc.
+   ```
+
+2. **Check sidebar code has correct route pattern:**
+   ```blade
+   <!-- Each menu item must match a route -->
+   <li @class(['active' => request()->routeIs('admin.articles.*')])>
+       <a href="{{ route('admin.articles.index') }}">Articles</a>
+   </li>
+   ```
+
+3. **Debug with Tinker:**
+   ```bash
+   php artisan tinker
+   >>> request()->routeIs('admin.articles.*')
+   # Should return true if on /admin/articles
+   >>> request()->route()->getName()
+   # Should return 'admin.articles.index'
+   ```
+
+### Admin Login Form Not Styled
+
+**Symptom:**
+- Login form looks plain (Tailwind, not Bootstrap)
+- Form fields not aligned properly
+- No Stisla theme applied
+
+**Cause:** Stisla CSS not loaded in login view
+
+**Solution:**
+
+1. **Verify login extends master layout:**
+   ```blade
+   <!-- resources/views/admin/auth/login.blade.php -->
+   @extends('admin.layouts.master')
+   @section('content')
+       <!-- Form here will use master's CSS -->
+   @endsection
+   ```
+
+2. **If login is standalone, add CSS manually:**
+   ```blade
+   <!DOCTYPE html>
+   <head>
+       <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
+   </head>
+   ```
+
+---
+
 ## Authentication Issues
 
 ### "Unauthenticated" When Should be Logged In

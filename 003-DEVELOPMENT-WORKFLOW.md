@@ -951,6 +951,103 @@ php composer.phar require barryvdh/laravel-debugbar --dev
 
 ---
 
+## Admin Panel Testing
+
+### Test Admin Login
+
+1. **Visit Admin Login Page:**
+   ```
+   http://127.0.0.1:8000/admin/login
+   ```
+
+2. **Use Test Credentials:**
+   ```
+   Email: superadmin@newsportal.local
+   Password: password123
+   ```
+
+   Other roles:
+   - Admin: admin@newsportal.local
+   - Editor: editor@newsportal.local
+   - Writer: writer@newsportal.local
+   - Publisher: publisher@newsportal.local
+
+3. **Expected Result:**
+   - Login successful → Redirects to `/admin/dashboard`
+   - Dashboard displays admin info (name, email, role)
+   - Sidebar visible with navigation menu
+
+### Test Sidebar Active State
+
+Sidebar menu highlights current page dynamically using `request()->routeIs()`:
+
+1. **Dashboard Page:**
+   ```
+   http://127.0.0.1:8000/admin/dashboard
+   ```
+   → "Dashboard" menu highlighted
+
+2. **Articles Page:**
+   ```
+   http://127.0.0.1:8000/admin/articles
+   ```
+   → "Articles" menu highlighted
+
+3. **Users Page:**
+   ```
+   http://127.0.0.1:8000/admin/users
+   ```
+   → "Users" menu highlighted
+
+4. **Roles Page:**
+   ```
+   http://127.0.0.1:8000/admin/roles
+   ```
+   → "Roles" menu highlighted
+
+5. **Settings Page:**
+   ```
+   http://127.0.0.1:8000/admin/settings
+   ```
+   → "Settings" menu highlighted
+
+**Note:** Each page is currently a stub (basic template). Click sidebar links to verify active state changes correctly.
+
+### Test Admin Authentication
+
+1. **Access protected route without auth:**
+   ```
+   http://127.0.0.1:8000/admin/dashboard
+   ```
+   → Redirects to `/admin/login` (not authenticated)
+
+2. **After login, verify session:**
+   ```bash
+   php artisan tinker
+   >>> auth('admin')->user()
+   # Shows authenticated Admin model
+   ```
+
+3. **Test logout:**
+   - Click logout button in admin dropdown
+   - Redirects to `/admin/login`
+   - Session destroyed
+
+### Verify Admin Assets
+
+Check that Stisla CSS/JS loads correctly:
+
+1. **Open browser DevTools (F12)**
+2. **Network tab** → Reload `/admin/dashboard`
+3. **Look for:**
+   - ✅ `public/admin/assets/css/style.css` - 200 OK
+   - ✅ `public/admin/assets/js/stisla.js` - 200 OK
+   - ✅ `public/admin/assets/modules/bootstrap/` - 200 OK
+
+If any return 404, verify `public/admin/assets/` folder exists and files are accessible.
+
+---
+
 ## Next Steps
 
 1. **Testing:** [004-TESTING-QUALITY.md](./004-TESTING-QUALITY.md)
