@@ -22,6 +22,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+        // Seed languages
+        $this->call(LanguageSeeder::class);
+
+        // Seed categories
+        $this->call(CategorySeeder::class);
+
         // Seed admins
         $this->call(AdminSeeder::class);
     }

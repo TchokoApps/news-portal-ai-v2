@@ -49,6 +49,12 @@
             </li>
 
             <li class="menu-header">Management</li>
+            <li @class(['active' => request()->routeIs('language.*')])>
+                <a class="nav-link" href="{{ route('language.index') }}"><i class="fas fa-globe"></i> <span>Languages</span></a>
+            </li>
+            <li @class(['active' => request()->routeIs('category.*')])>
+                <a class="nav-link" href="{{ route('category.index') }}"><i class="fas fa-list"></i> <span>Categories</span></a>
+            </li>
             <li @class(['active' => request()->routeIs('admin.articles.*')])>
                 <a class="nav-link" href="{{ route('admin.articles.index') }}"><i class="fas fa-newspaper"></i> <span>Articles</span></a>
             </li>

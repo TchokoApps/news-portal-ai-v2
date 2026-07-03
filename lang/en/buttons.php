@@ -31,5 +31,9 @@ return [
     'Upload' => 'Upload',
     'Export' => 'Export',
     'Import' => 'Import',
+    'Create Category' => 'Create Category',
+    'Create New Category' => 'Create New Category',
+    'Update Category' => 'Update Category',
+    'Yes, Delete It!' => 'Yes, Delete It!',
 
 ];

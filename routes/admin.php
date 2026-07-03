@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +29,12 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // Admin Profile Routes
     Route::resource('admin-profile', ProfileController::class)->only(['index', 'update'])->names('admin.profile');
+
+    // Category Resource Routes
+    Route::resource('category', CategoryController::class);
+
+    // Language Resource Routes
+    Route::resource('language', LanguageController::class);
 
     // Stub routes for sidebar testing
     Route::get('/articles', function () {
