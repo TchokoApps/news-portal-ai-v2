@@ -12,6 +12,8 @@
 
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="{{ asset('admin/assets/modules/summernote/summernote-bs4.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/select2/dist/css/select2.min.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-tagsinput@0.8.0/dist/bootstrap-tagsinput.css" rel="stylesheet">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
@@ -57,6 +59,8 @@
 
 <!-- JS Libraries -->
 <script src="{{ asset('admin/assets/modules/summernote/summernote-bs4.js') }}"></script>
+<script src="{{ asset('admin/assets/modules/select2/dist/js/select2.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-tagsinput@0.8.0/dist/bootstrap-tagsinput.min.js"></script>
 
 <!-- Template JS File -->
 <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>

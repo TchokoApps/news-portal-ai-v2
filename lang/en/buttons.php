@@ -35,5 +35,8 @@ return [
     'Create New Category' => 'Create New Category',
     'Update Category' => 'Update Category',
     'Yes, Delete It!' => 'Yes, Delete It!',
+    'Create News' => 'Create News',
+    'Create New News' => 'Create New News',
+    'Update News' => 'Update News',
 
 ];

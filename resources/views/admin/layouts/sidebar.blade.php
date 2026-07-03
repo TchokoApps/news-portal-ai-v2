@@ -55,8 +55,11 @@
             <li @class(['active' => request()->routeIs('category.*')])>
                 <a class="nav-link" href="{{ route('category.index') }}"><i class="fas fa-list"></i> <span>Categories</span></a>
             </li>
+            <li @class(['active' => request()->routeIs('news.*')])>
+                <a class="nav-link" href="{{ route('news.index') }}"><i class="fas fa-newspaper"></i> <span>News</span></a>
+            </li>
             <li @class(['active' => request()->routeIs('admin.articles.*')])>
-                <a class="nav-link" href="{{ route('admin.articles.index') }}"><i class="fas fa-newspaper"></i> <span>Articles</span></a>
+                <a class="nav-link" href="{{ route('admin.articles.index') }}"><i class="fas fa-file-alt"></i> <span>Articles</span></a>
             </li>
             <li @class(['active' => request()->routeIs('admin.users.*')])>
                 <a class="nav-link" href="{{ route('admin.users.index') }}"><i class="fas fa-users"></i> <span>Users</span></a>

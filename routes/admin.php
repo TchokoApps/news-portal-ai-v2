@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LanguageController;
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,10 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // Language Resource Routes
     Route::resource('language', LanguageController::class);
+
+    // News Resource Routes
+    Route::resource('news', NewsController::class);
+    Route::get('/news/fetch-category', [NewsController::class, 'fetchCategory'])->name('news.fetch-category');
 
     // Stub routes for sidebar testing
     Route::get('/articles', function () {

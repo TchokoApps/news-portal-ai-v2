@@ -30,5 +30,8 @@ class DatabaseSeeder extends Seeder
 
         // Seed admins
         $this->call(AdminSeeder::class);
+
+        // Seed news
+        $this->call(NewsSeeder::class);
     }
 }
