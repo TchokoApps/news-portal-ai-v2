@@ -28,7 +28,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('news.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('news.store') }}" enctype="multipart/form-data" id="newsForm">
                         @csrf
 
                         <!-- Language Selection -->
@@ -178,6 +178,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="status" value="draft">
                                     <input
                                         type="checkbox"
                                         class="custom-control-input"
@@ -290,10 +291,12 @@
                 });
 
                 // Initialize Tags Input
-                $('input[data-role="tagsinput"]').tagsinput({
-                    trimValue: true,
-                    allowDuplicates: false
-                });
+                if ($.fn.tagsinput) {
+                    $('input[data-role="tagsinput"]').tagsinput({
+                        trimValue: true,
+                        allowDuplicates: false
+                    });
+                }
 
                 // Image preview
                 $('#image').on('change', function(e) {
@@ -352,6 +355,70 @@
                 // Handle status toggle
                 $('#status').on('change', function() {
                     $(this).val($(this).is(':checked') ? 'published' : 'draft');
+                });
+
+                // Form validation before submission
+                $('#newsForm').on('submit', function(e) {
+                    let isValid = true;
+                    const errors = [];
+
+                    // Clear previous error styles
+                    $(this).find('.form-control, textarea').removeClass('is-invalid');
+
+                    // Validate language
+                    if (!$('#language').val()) {
+                        $('#language').addClass('is-invalid');
+                        errors.push('{{ __("labels.language") }} is required');
+                        isValid = false;
+                    }
+
+                    // Validate category
+                    if (!$('#category_id').val()) {
+                        $('#category_id').addClass('is-invalid');
+                        errors.push('{{ __("labels.category_name") }} is required');
+                        isValid = false;
+                    }
+
+                    // Validate title
+                    if (!$('#title').val().trim()) {
+                        $('#title').addClass('is-invalid');
+                        errors.push('{{ __("labels.title") }} is required');
+                        isValid = false;
+                    }
+
+                    // Validate content
+                    const contentHtml = $('.summernote-simple').summernote('code');
+                    const contentText = $('<div>').html(contentHtml).text().trim();
+                    if (!contentText) {
+                        $('.summernote-simple').addClass('is-invalid');
+                        errors.push('{{ __("labels.content") }} is required');
+                        isValid = false;
+                    }
+
+                    // If validation fails, show error message
+                    if (!isValid) {
+                        e.preventDefault();
+
+                        let errorHtml = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+                        errorHtml += '<strong>{{ __("labels.error") }}!</strong>';
+                        errorHtml += '<ul class="mb-0 mt-2">';
+                        errors.forEach(error => {
+                            errorHtml += `<li>${error}</li>`;
+                        });
+                        errorHtml += '</ul>';
+                        errorHtml += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+                        errorHtml += '<span aria-hidden="true">&times;</span></button></div>';
+
+                        // Insert error message at top of form
+                        $(this).find('.card-body').prepend(errorHtml);
+
+                        // Scroll to error
+                        $('html, body').animate({
+                            scrollTop: $(this).offset().top - 100
+                        }, 300);
+
+                        return false;
+                    }
                 });
             });
         </script>

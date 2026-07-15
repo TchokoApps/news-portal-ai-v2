@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-12 col-lg-8">
                     <div class="wrapper__list__article">
-                        <h4 class="border_section">recent post</h4>
+                        <h2 class="border_section">recent post</h2>
                     </div>
                     <div class="row ">
                         <div class="col-sm-12 col-md-6 mb-4">
@@ -20,11 +20,11 @@
                                             politics
                                         </div>
                                         <div class="card__post__title">
-                                            <h5>
+                                            <h3>
                                                 <a href="blog_details.html">
                                                     Barack Obama and Family Visit borobudur temple enjoy holiday
                                                     indonesia.</a>
-                                            </h5>
+                                            </h3>
                                         </div>
                                         <div class="card__post__author-info">
                                             <ul class="list-inline">
@@ -57,11 +57,11 @@
                                             politics
                                         </div>
                                         <div class="card__post__title">
-                                            <h5>
+                                            <h3>
                                                 <a href="blog_details.html">
                                                     Barack Obama and Family Visit borobudur temple enjoy holiday
                                                     indonesia.</a>
-                                            </h5>
+                                            </h3>
                                         </div>
                                         <div class="card__post__author-info">
                                             <ul class="list-inline">
@@ -115,11 +115,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h6>
+                                                    <h4>
                                                         <a href="blog_details.html">
                                                             6 Best Tips for Building a Good Shipping Boat
                                                         </a>
-                                                    </h6>
+                                                    </h4>
                                                 </div>
                                             </div>
                                         </div>
@@ -153,11 +153,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h6>
+                                                    <h4>
                                                         <a href="blog_details.html">
                                                             6 Best Tips for Building a Good Shipping Boat
                                                         </a>
-                                                    </h6>
+                                                    </h4>
                                                 </div>
                                             </div>
                                         </div>
@@ -195,11 +195,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h6>
+                                                    <h4>
                                                         <a href="blog_details.html">
                                                             6 Best Tips for Building a Good Shipping Boat
                                                         </a>
-                                                    </h6>
+                                                    </h4>
                                                 </div>
                                             </div>
                                         </div>
@@ -234,11 +234,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h6>
+                                                    <h4>
                                                         <a href="blog_details.html">
                                                             6 Best Tips for Building a Good Shipping Boat
                                                         </a>
-                                                    </h6>
+                                                    </h4>
                                                 </div>
                                             </div>
 
@@ -253,7 +253,7 @@
 
                 <div class="col-md-12 col-lg-4">
                     <aside class="wrapper__list__article">
-                        <h4 class="border_section">popular post</h4>
+                        <h2 class="border_section">popular post</h2>
                         <div class="wrapper__list-number">
 
                             <!-- List Article -->
@@ -268,13 +268,13 @@
                                 </a>
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
-                                        <h5>
+                                        <h3>
                                             <a href="#">
                                                 Gegera Corona, Kekayaan Bos Zoom Nambah Rp 64 T dalam 3 Bulan - CNBC
                                                 Indonesia
 
                                             </a>
-                                        </h5>
+                                        </h3>
                                     </li>
                                 </ul>
                             </div>
@@ -291,13 +291,13 @@
                                 </a>
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
-                                        <h5>
+                                        <h3>
                                             <a href="#">
                                                 Gegera Corona, Kekayaan Bos Zoom Nambah Rp 64 T dalam 3 Bulan - CNBC
                                                 Indonesia
 
                                             </a>
-                                        </h5>
+                                        </h3>
                                     </li>
                                 </ul>
                             </div>
@@ -314,13 +314,13 @@
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
 
-                                        <h5>
+                                        <h3>
                                             <a href="#">
                                                 Gegera Corona, Kekayaan Bos Zoom Nambah Rp 64 T dalam 3 Bulan - CNBC
                                                 Indonesia
 
                                             </a>
-                                        </h5>
+                                        </h3>
                                     </li>
                                 </ul>
 
@@ -338,13 +338,13 @@
                                 </a>
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
-                                        <h5>
+                                        <h3>
                                             <a href="#">
                                                 Gegera Corona, Kekayaan Bos Zoom Nambah Rp 64 T dalam 3 Bulan - CNBC
                                                 Indonesia
 
                                             </a>
-                                        </h5>
+                                        </h3>
                                     </li>
                                 </ul>
                             </div>
@@ -388,11 +388,11 @@
                                     </li>
 
                                 </ul>
-                                <h5>
+                                <h3>
                                     <a href="#">
                                         Maecenas accumsan tortor ut velit pharetra mollis.
                                     </a>
-                                </h5>
+                                </h3>
 
                             </div>
                         </div>
@@ -419,11 +419,11 @@
                                     </li>
 
                                 </ul>
-                                <h5>
+                                <h3>
                                     <a href="#">
                                         Maecenas accumsan tortor ut velit pharetra mollis.
                                     </a>
-                                </h5>
+                                </h3>
 
                             </div>
                         </div>
@@ -450,11 +450,11 @@
                                     </li>
 
                                 </ul>
-                                <h5>
+                                <h3>
                                     <a href="#">
                                         Maecenas accumsan tortor ut velit pharetra mollis.
                                     </a>
-                                </h5>
+                                </h3>
 
                             </div>
                         </div>
@@ -481,11 +481,11 @@
                                     </li>
 
                                 </ul>
-                                <h5>
+                                <h3>
                                     <a href="#">
                                         Maecenas accumsan tortor ut velit pharetra mollis.
                                     </a>
-                                </h5>
+                                </h3>
 
                             </div>
                         </div>
@@ -512,11 +512,11 @@
                                     </li>
 
                                 </ul>
-                                <h5>
+                                <h3>
                                     <a href="#">
                                         Maecenas accumsan tortor ut velit pharetra mollis.
                                     </a>
-                                </h5>
+                                </h3>
 
                             </div>
                         </div>
@@ -559,11 +559,11 @@
                                                 </li>
 
                                             </ul>
-                                            <h5>
+                                            <h3>
                                                 <a href="#">
                                                     Maecenas accumsan tortor ut velit pharetra mollis.
                                                 </a>
-                                            </h5>
+                                            </h3>
 
                                         </div>
                                     </div>
@@ -590,11 +590,11 @@
                                                 </li>
 
                                             </ul>
-                                            <h5>
+                                            <h3>
                                                 <a href="#">
                                                     Maecenas accumsan tortor ut velit pharetra mollis.
                                                 </a>
-                                            </h5>
+                                            </h3>
 
                                         </div>
                                     </div>
@@ -621,11 +621,11 @@
                                                 </li>
 
                                             </ul>
-                                            <h5>
+                                            <h3>
                                                 <a href="#">
                                                     Maecenas accumsan tortor ut velit pharetra mollis.
                                                 </a>
-                                            </h5>
+                                            </h3>
 
                                         </div>
                                     </div>
@@ -654,11 +654,11 @@
                                                 </li>
 
                                             </ul>
-                                            <h5>
+                                            <h3>
                                                 <a href="#">
                                                     Maecenas accumsan tortor ut velit pharetra mollis.
                                                 </a>
-                                            </h5>
+                                            </h3>
 
                                         </div>
                                     </div>
@@ -685,11 +685,11 @@
                                                 </li>
 
                                             </ul>
-                                            <h5>
+                                            <h3>
                                                 <a href="#">
                                                     Maecenas accumsan tortor ut velit pharetra mollis.
                                                 </a>
-                                            </h5>
+                                            </h3>
 
                                         </div>
                                     </div>
@@ -716,11 +716,11 @@
                                                 </li>
 
                                             </ul>
-                                            <h5>
+                                            <h3>
                                                 <a href="#">
                                                     Maecenas accumsan tortor ut velit pharetra mollis.
                                                 </a>
-                                            </h5>
+                                            </h3>
 
                                         </div>
                                     </div>
@@ -770,11 +770,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h5>
+                                                    <h3>
                                                         <a href="#">
                                                             Exercitation Ullamco Laboris Nisi Ut Aliquip
                                                         </a>
-                                                    </h5>
+                                                    </h3>
                                                     <p class="d-none d-lg-block d-xl-block mb-0">
                                                         Maecenas accumsan tortor ut velit pharetra mollis. Proin eu
                                                         nisl et arcu iaculis placerat
@@ -818,11 +818,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h5>
+                                                    <h3>
                                                         <a href="#">
                                                             Exercitation Ullamco Laboris Nisi Ut Aliquip
                                                         </a>
-                                                    </h5>
+                                                    </h3>
                                                     <p class="d-none d-lg-block d-xl-block mb-0">
                                                         Maecenas accumsan tortor ut velit pharetra mollis. Proin eu
                                                         nisl et arcu iaculis placerat
@@ -866,11 +866,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h5>
+                                                    <h3>
                                                         <a href="#">
                                                             Exercitation Ullamco Laboris Nisi Ut Aliquip
                                                         </a>
-                                                    </h5>
+                                                    </h3>
                                                     <p class="d-none d-lg-block d-xl-block mb-0">
                                                         Maecenas accumsan tortor ut velit pharetra mollis. Proin eu
                                                         nisl et arcu iaculis placerat
@@ -913,11 +913,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h5>
+                                                    <h3>
                                                         <a href="#">
                                                             Exercitation Ullamco Laboris Nisi Ut Aliquip
                                                         </a>
-                                                    </h5>
+                                                    </h3>
                                                     <p class="d-none d-lg-block d-xl-block mb-0">
                                                         Maecenas accumsan tortor ut velit pharetra mollis. Proin eu
                                                         nisl et arcu iaculis placerat
@@ -964,11 +964,11 @@
                                             </li>
 
                                         </ul>
-                                        <h5>
+                                        <h3>
                                             <a href="#">
                                                 Proin eu nisl et arcu iaculis placerat sollicitudin ut est
                                             </a>
-                                        </h5>
+                                        </h3>
                                         <p>
                                             Maecenas accumsan tortor ut velit pharetra mollis. Proin eu nisl et arcu
                                             iaculis placerat sollicitudin ut
@@ -1005,11 +1005,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h6>
+                                                    <h4>
                                                         <a href="blog_details.html">
                                                             6 Best Tips for Building a Good Shipping Boat
                                                         </a>
-                                                    </h6>
+                                                    </h4>
                                                 </div>
                                             </div>
                                         </div>
@@ -1043,11 +1043,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="card__post__title">
-                                                    <h6>
+                                                    <h4>
                                                         <a href="blog_details.html">
                                                             6 Best Tips for Building a Good Shipping Boat
                                                         </a>
-                                                    </h6>
+                                                    </h4>
                                                 </div>
                                             </div>
                                         </div>
@@ -1201,9 +1201,9 @@
                             <h4 class="border_section">newsletter</h4>
                             <!-- Form Subscribe -->
                             <div class="widget__form-subscribe bg__card-shadow">
-                                <h6>
+                                <h4>
                                     The most important world news and events of the day.
-                                </h6>
+                                </h4>
                                 <p><small>Get magzrenvi daily newsletter on your inbox.</small></p>
                                 <div class="input-group ">
                                     <input type="text" class="form-control" placeholder="Your email address">

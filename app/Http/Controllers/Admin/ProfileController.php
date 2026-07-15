@@ -34,7 +34,7 @@ class ProfileController extends Controller
 
         // Handle file upload if image is provided
         $profileImage = $request->file('profile_image')
-            ? $this->uploadFile($request, 'profile_image', 'uploads/profiles', $admin->profile_image)
+            ? $this->uploadFile($request->file('profile_image'), 'uploads/profiles', $admin->profile_image)
             : $admin->profile_image;
 
         // Prepare update data

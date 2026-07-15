@@ -113,17 +113,10 @@ class NewsController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            // Delete old image
-            if ($news->image) {
-                $oldPath = public_path($news->image);
-                if (file_exists($oldPath)) {
-                    unlink($oldPath);
-                }
-            }
-
             $validated['image'] = $this->uploadFile(
                 $request->file('image'),
-                'uploads/news'
+                'uploads/news',
+                $news->image
             );
         }
 

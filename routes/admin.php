@@ -37,9 +37,9 @@ Route::middleware(['auth:admin'])->group(function () {
     // Language Resource Routes
     Route::resource('language', LanguageController::class);
 
-    // News Resource Routes
-    Route::resource('news', NewsController::class);
+    // News Resource Routes - fetch-category must come BEFORE resource route
     Route::get('/news/fetch-category', [NewsController::class, 'fetchCategory'])->name('news.fetch-category');
+    Route::resource('news', NewsController::class);
 
     // Stub routes for sidebar testing
     Route::get('/articles', function () {

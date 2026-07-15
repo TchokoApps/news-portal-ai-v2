@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -11,23 +11,14 @@ trait FileUploadTrait
     /**
      * Upload a file and return the path.
      *
-     * @param Request $request The request object
-     * @param string $fieldName The name of the file input field
+     * @param UploadedFile $file The file to upload
      * @param string $uploadDir The directory to store files (e.g., 'uploads/profiles')
      * @param string|null $oldPath The path of the old file to delete (optional)
      *
-     * @return string|null The path to the uploaded file, or null if no file was uploaded
+     * @return string|null The path to the uploaded file, or null if file is invalid
      */
-    public function uploadFile(Request $request, string $fieldName, string $uploadDir, ?string $oldPath = null): ?string
+    public function uploadFile(UploadedFile $file, string $uploadDir, ?string $oldPath = null): ?string
     {
-        // Check if the file exists in the request
-        if (!$request->hasFile($fieldName)) {
-            return null;
-        }
-
-        // Get the file from the request
-        $file = $request->file($fieldName);
-
         // Validate that the file is valid
         if (!$file->isValid()) {
             return null;
