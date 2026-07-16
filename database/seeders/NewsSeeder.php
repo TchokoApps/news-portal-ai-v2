@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Category;
 use App\Models\News;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class NewsSeeder extends Seeder
 {
@@ -14,101 +15,105 @@ class NewsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get an admin user for author_id
-        $admin = Admin::first();
+        $admin = Admin::query()->first();
         if (! $admin) {
-            return; // Skip if no admin exists
+            return;
         }
 
-        $newsData = [
-            // English News
-            [
-                'language' => 'en',
-                'category_id' => Category::where('language', 'en')->where('name', 'Technology')->first()?->id,
-                'author_id' => $admin->id,
-                'title' => 'Latest AI Breakthroughs in 2026',
-                'slug' => 'latest-ai-breakthroughs-2026',
-                'content' => '<p>Artificial Intelligence continues to revolutionize industries across the globe...</p>',
-                'image' => null,
-                'meta_title' => 'AI Breakthroughs 2026',
-                'meta_description' => 'Discover the latest AI breakthroughs transforming technology',
-                'is_breaking_news' => true,
-                'show_at_slider' => true,
-                'show_at_popular' => true,
-                'status' => 'published',
+        $imagePool = [
+            'frontend/assets/images/newsimage1.png',
+            'frontend/assets/images/newsimage2.png',
+            'frontend/assets/images/newsimage3.png',
+            'frontend/assets/images/newsimage4.png',
+            'frontend/assets/images/newsimage5.png',
+            'frontend/assets/images/newsimage6.png',
+            'frontend/assets/images/newsimage7.png',
+            'frontend/assets/images/newsimage8.png',
+            'frontend/assets/images/newsimage9.png',
+        ];
+
+        $breakingTemplates = [
+            'en' => [
+                'Global Markets React to New AI Regulation Framework',
+                'Emergency Summit Opens After Regional Cybersecurity Incident',
+                'Health Agency Confirms Vaccine Rollout Expansion This Week',
+                'Satellite Data Reveals Rapid Coastal Weather Shift',
+                'Central Bank Signals Policy Hold Amid Inflation Cooling',
+                'New Energy Grid Goes Live Across Three Major Cities',
+                'International Sports Federation Announces Rule Overhaul',
+                'Major Hospital Network Deploys AI Diagnostic Platform',
+                'Tech Consortium Unveils Open Standard for Smart Devices',
+                'Rail Authority Launches High-Speed Corridor Phase One',
+                'University Team Publishes Breakthrough Battery Research',
+                'National Security Council Raises Digital Threat Alert',
             ],
-            [
-                'language' => 'en',
-                'category_id' => Category::where('language', 'en')->where('name', 'Business')->first()?->id,
-                'author_id' => $admin->id,
-                'title' => 'Tech Giants Report Record Earnings',
-                'slug' => 'tech-giants-record-earnings',
-                'content' => '<p>Major technology companies announce their best quarterly results...</p>',
-                'image' => null,
-                'meta_title' => 'Tech Earnings Report',
-                'meta_description' => 'Tech giants report record breaking earnings',
-                'is_breaking_news' => false,
-                'show_at_slider' => true,
-                'show_at_popular' => false,
-                'status' => 'published',
+            'de' => [
+                'Eilmeldung: Neue Technologieinitiative startet bundesweit',
+                'Wirtschaftsministerium meldet starkes Quartalswachstum',
+                'Gesundheitsbehoerde erweitert Notfallkapazitaeten',
             ],
-            // German News
-            [
-                'language' => 'de',
-                'category_id' => Category::where('language', 'de')->where('name', 'Technologie')->first()?->id,
-                'author_id' => $admin->id,
-                'title' => 'Künstliche Intelligenz verändert die Industrie',
-                'slug' => 'kuenstliche-intelligenz-veraendert-industrie',
-                'content' => '<p>Künstliche Intelligenz ist die treibende Kraft der digitalen Transformation...</p>',
-                'image' => null,
-                'meta_title' => 'KI Durchbruch',
-                'meta_description' => 'KI verändert industrielle Prozesse',
-                'is_breaking_news' => true,
-                'show_at_slider' => true,
-                'show_at_popular' => true,
-                'status' => 'published',
+            'es' => [
+                'Urgente: Gobierno anuncia nuevo plan de seguridad digital',
+                'Mercados regionales suben tras informe economico',
+                'Sistema sanitario activa protocolo de respuesta rapida',
             ],
-            // Spanish News
-            [
-                'language' => 'es',
-                'category_id' => Category::where('language', 'es')->where('name', 'Tecnología')->first()?->id,
-                'author_id' => $admin->id,
-                'title' => 'Nuevos Avances en Inteligencia Artificial',
-                'slug' => 'nuevos-avances-inteligencia-artificial',
-                'content' => '<p>La inteligencia artificial continúa transformando el mundo...</p>',
-                'image' => null,
-                'meta_title' => 'Avances en IA',
-                'meta_description' => 'Descubra los nuevos avances en IA',
-                'is_breaking_news' => false,
-                'show_at_slider' => true,
-                'show_at_popular' => false,
-                'status' => 'published',
-            ],
-            // Arabic News
-            [
-                'language' => 'ar',
-                'category_id' => Category::where('language', 'ar')->where('name', 'تكنولوجيا')->first()?->id,
-                'author_id' => $admin->id,
-                'title' => 'أحدث التطورات في الذكاء الاصطناعي',
-                'slug' => 'ahdat-attataworat-fi-alzaka-alastinaee',
-                'content' => '<p>الذكاء الاصطناعي يحدث ثورة في جميع الصناعات...</p>',
-                'image' => null,
-                'meta_title' => 'تطورات الذكاء الاصطناعي',
-                'meta_description' => 'اكتشف أحدث تطورات الذكاء الاصطناعي',
-                'is_breaking_news' => false,
-                'show_at_slider' => false,
-                'show_at_popular' => true,
-                'status' => 'published',
+            'ar' => [
+                'عاجل: إطلاق مبادرة وطنية جديدة للتحول الرقمي',
+                'ارتفاع مؤشرات السوق بعد تقرير اقتصادي حديث',
+                'توسيع جاهزية القطاع الصحي لحالات الطوارئ',
             ],
         ];
 
-        foreach ($newsData as $data) {
-            if ($data['category_id']) {
-                News::firstOrCreate(
-                    ['language' => $data['language'], 'title' => $data['title']],
-                    $data
+        foreach ($breakingTemplates as $language => $titles) {
+            $category = Category::query()->where('language', $language)->first();
+
+            if (! $category) {
+                continue;
+            }
+
+            foreach ($titles as $index => $title) {
+                $slug = Str::slug($title).'-'.$language.'-'.($index + 1);
+
+                News::query()->updateOrCreate(
+                    ['slug' => $slug],
+                    [
+                        'language' => $language,
+                        'category_id' => $category->id,
+                        'author_id' => $admin->id,
+                        'title' => $title,
+                        'content' => '<p>Seeded breaking news content for frontend slider preview.</p>',
+                        'image' => $imagePool[$index % count($imagePool)],
+                        'meta_title' => Str::limit($title, 55),
+                        'meta_description' => Str::limit('Seeded meta description for '.$title, 150),
+                        'is_breaking_news' => true,
+                        'show_at_slider' => true,
+                        'show_at_popular' => $index % 2 === 0,
+                        'status' => 'published',
+                        'is_approved' => true,
+                    ]
                 );
             }
+
+            $nonBreakingSlug = 'regular-news-'.$language;
+
+            News::query()->updateOrCreate(
+                ['slug' => $nonBreakingSlug],
+                [
+                    'language' => $language,
+                    'category_id' => $category->id,
+                    'author_id' => $admin->id,
+                    'title' => 'Regular seeded news for '.$language,
+                    'content' => '<p>Non breaking seeded news for filter validation.</p>',
+                    'image' => null,
+                    'meta_title' => 'Regular seeded news',
+                    'meta_description' => 'This record should not appear in breaking slider.',
+                    'is_breaking_news' => false,
+                    'show_at_slider' => false,
+                    'show_at_popular' => false,
+                    'status' => 'published',
+                    'is_approved' => true,
+                ]
+            );
         }
     }
 }
