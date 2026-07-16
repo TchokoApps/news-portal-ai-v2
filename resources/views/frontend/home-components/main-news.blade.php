@@ -20,11 +20,11 @@
                                             politics
                                         </div>
                                         <div class="card__post__title">
-                                            <h3>
+                                            <h5>
                                                 <a href="blog_details.html">
                                                     Barack Obama and Family Visit borobudur temple enjoy holiday
                                                     indonesia.</a>
-                                            </h3>
+                                            </h5>
                                         </div>
                                         <div class="card__post__author-info">
                                             <ul class="list-inline">
@@ -57,11 +57,11 @@
                                             politics
                                         </div>
                                         <div class="card__post__title">
-                                            <h3>
+                                            <h5>
                                                 <a href="blog_details.html">
                                                     Barack Obama and Family Visit borobudur temple enjoy holiday
                                                     indonesia.</a>
-                                            </h3>
+                                            </h5>
                                         </div>
                                         <div class="card__post__author-info">
                                             <ul class="list-inline">
