@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Language;
+use Illuminate\Support\Str;
 
 if (! function_exists('format_tags')) {
     /**
@@ -65,5 +66,12 @@ if (! function_exists('current_language')) {
         set_language($resolvedCode);
 
         return $resolvedCode;
+    }
+}
+
+if (! function_exists('truncate_text')) {
+    function truncate_text(?string $text, int $limit = 100, string $end = '...'): string
+    {
+        return Str::limit($text ?? '', $limit, $end);
     }
 }

@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class News extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'language',
         'category_id',
@@ -25,13 +29,16 @@ class News extends Model
         'is_approved',
     ];
 
-    protected $casts = [
-        'is_breaking_news' => 'boolean',
-        'show_at_slider' => 'boolean',
-        'show_at_popular' => 'boolean',
-        'is_approved' => 'boolean',
-        'status' => 'string',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_breaking_news' => 'boolean',
+            'show_at_slider' => 'boolean',
+            'show_at_popular' => 'boolean',
+            'is_approved' => 'boolean',
+            'status' => 'string',
+        ];
+    }
 
     /**
      * Get the category associated with this news.
@@ -55,5 +62,17 @@ class News extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function scopePubliclyVisible(Builder $query): Builder
+    {
+        return $query
+            ->where('status', 'published')
+            ->where('is_approved', true);
+    }
+
+    public function scopeForLanguage(Builder $query, string $languageCode): Builder
+    {
+        return $query->where('language', $languageCode);
     }
 }
