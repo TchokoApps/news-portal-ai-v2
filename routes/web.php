@@ -5,7 +5,8 @@ use App\Http\Controllers\Frontend\LanguageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/news/{slug}', [HomeController::class, 'showNews'])->name('news.details');
 Route::post('/language', LanguageController::class)->name('language.change');
 
 Route::get('/dashboard', function () {

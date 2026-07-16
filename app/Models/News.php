@@ -27,6 +27,7 @@ class News extends Model
         'show_at_popular',
         'status',
         'is_approved',
+        'views',
     ];
 
     protected function casts(): array
@@ -36,6 +37,7 @@ class News extends Model
             'show_at_slider' => 'boolean',
             'show_at_popular' => 'boolean',
             'is_approved' => 'boolean',
+            'views' => 'integer',
             'status' => 'string',
         ];
     }

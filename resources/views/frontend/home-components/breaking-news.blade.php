@@ -9,7 +9,7 @@
                             <div class="item">
                                 <div class="card__post card__post-list">
                                     <div class="image-sm">
-                                        <a href="#" aria-label="{{ $news->title }}">
+                                        <a href="{{ route('news.details', ['slug' => $news->slug]) }}" aria-label="{{ $news->title }}">
                                             <img
                                                 src="{{ $news->image ? asset($news->image) : asset('frontend/assets/images/news1.jpg') }}"
                                                 class="img-fluid"
@@ -36,7 +36,7 @@
                                             </div>
                                             <div class="card__post__title">
                                                 <h6>
-                                                    <a href="#">
+                                                    <a href="{{ route('news.details', ['slug' => $news->slug]) }}">
                                                         {{ truncate_text($news->title, 60) }}
                                                     </a>
                                                 </h6>

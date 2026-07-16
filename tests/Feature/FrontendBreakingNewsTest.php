@@ -74,6 +74,7 @@ class FrontendBreakingNewsTest extends TestCase
 
         $response->assertOk();
         $response->assertSee($visible->title);
+        $this->assertSame(2, substr_count($response->getContent(), route('news.details', ['slug' => $visible->slug])));
         $response->assertDontSee('English Draft Hidden');
         $response->assertDontSee('English Pending Hidden');
         $response->assertDontSee('English Non Breaking Hidden');
