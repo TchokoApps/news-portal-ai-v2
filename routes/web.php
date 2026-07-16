@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\LanguageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
+Route::post('/language', LanguageController::class)->name('language.change');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

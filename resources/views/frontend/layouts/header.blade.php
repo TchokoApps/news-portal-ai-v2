@@ -26,11 +26,28 @@
                 <div class="col-sm-6 col-md-4">
                     <div class="list-unstyled topbar-right d-flex align-items-center justify-content-end">
                         <div class="topbar_language">
-                            <select>
-                                <option>English</option>
-                                <option>Chines</option>
-                                <option>Korean</option>
-                            </select>
+                            @if ($frontendLanguages->isNotEmpty())
+                                <select
+                                    id="site-language"
+                                    name="language"
+                                    class="language-selector"
+                                    data-current-language="{{ $currentFrontendLanguageCode }}"
+                                >
+                                    @foreach ($frontendLanguages as $language)
+                                        @php($languageCode = $language->lang ?: $language->code)
+                                        <option
+                                            value="{{ $languageCode }}"
+                                            @selected($currentFrontendLanguageCode === $languageCode)
+                                        >
+                                            {{ $language->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <select id="site-language" name="language" class="language-selector" disabled>
+                                    <option>{{ __('messages.no_languages_yet') }}</option>
+                                </select>
+                            @endif
                         </div>
 
                         <ul class="topbar-link">
@@ -184,3 +201,45 @@
     </div>
 </header>
 <!-- End Header news -->
+
+@if ($frontendLanguages->isNotEmpty())
+    <script>
+        $(function() {
+            $(document).on('change', '#site-language', function() {
+                const selector = $(this);
+                const languageCode = selector.val();
+                const previousLanguage = selector.data('current-language');
+                const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                selector.prop('disabled', true);
+
+                $.ajax({
+                    method: 'POST',
+                    url: "{{ route('language.change') }}",
+                    data: {
+                        language_code: languageCode
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function(response) {
+                        if (response.status !== 'success') {
+                            selector
+                                .val(previousLanguage)
+                                .prop('disabled', false);
+
+                            return;
+                        }
+
+                        window.location.reload();
+                    },
+                    error: function() {
+                        selector
+                            .val(previousLanguage)
+                            .prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script>
+@endif

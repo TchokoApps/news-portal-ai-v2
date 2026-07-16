@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Language;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('frontend.layouts.header', function ($view): void {
+            $frontendLanguages = Language::query()
+                ->where('status', true)
+                ->orderByDesc('default')
+                ->orderBy('name')
+                ->get();
+
+            $view->with([
+                'frontendLanguages' => $frontendLanguages,
+                'currentFrontendLanguageCode' => current_language(),
+            ]);
+        });
     }
 }
