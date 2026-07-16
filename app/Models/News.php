@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class News extends Model
 {
@@ -21,12 +22,14 @@ class News extends Model
         'show_at_slider',
         'show_at_popular',
         'status',
+        'is_approved',
     ];
 
     protected $casts = [
         'is_breaking_news' => 'boolean',
         'show_at_slider' => 'boolean',
         'show_at_popular' => 'boolean',
+        'is_approved' => 'boolean',
         'status' => 'string',
     ];
 
@@ -44,5 +47,13 @@ class News extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(Admin::class, 'author_id');
+    }
+
+    /**
+     * Get tags associated with this news.
+     */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }

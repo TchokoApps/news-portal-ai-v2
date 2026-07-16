@@ -61,6 +61,7 @@ return [
     'news_created_successfully' => 'News created successfully!',
     'news_updated_successfully' => 'News updated successfully!',
     'news_deleted_successfully' => 'News deleted successfully!',
+    'news_copied_successfully' => 'News copied successfully!',
     'no_news_yet' => 'No news yet. Create your first news article to get started.',
     'delete_news_confirmation' => 'Are you sure you want to delete this news article? This action cannot be undone.',
     'failed_to_load_categories' => 'Failed to load categories. Please try again.',

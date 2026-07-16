@@ -25,9 +25,9 @@ class AdminLanguageUpdateRequest extends FormRequest
         $languageId = $this->route('language')->id;
 
         return [
-            'code' => 'required|string|max:255|unique:languages,code,' . $languageId,
+            'code' => 'required|string|max:255|unique:languages,code,'.$languageId,
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:languages,slug,' . $languageId,
+            'slug' => 'required|string|max:255|unique:languages,slug,'.$languageId,
             'default' => 'required|boolean',
             'status' => 'required|boolean',
         ];

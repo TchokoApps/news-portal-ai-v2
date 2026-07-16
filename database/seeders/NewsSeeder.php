@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\News;
-use App\Models\Category;
 use App\Models\Admin;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
+use App\Models\News;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class NewsSeeder extends Seeder
 {
@@ -18,7 +16,7 @@ class NewsSeeder extends Seeder
     {
         // Get an admin user for author_id
         $admin = Admin::first();
-        if (!$admin) {
+        if (! $admin) {
             return; // Skip if no admin exists
         }
 

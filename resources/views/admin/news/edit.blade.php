@@ -32,6 +32,10 @@
                         @csrf
                         @method('PUT')
 
+                        @php
+                            $selectedCategoryId = (int) old('category_id', $news->category_id);
+                        @endphp
+
                         <!-- Language Selection -->
                         <div class="form-group">
                             <label for="language">{{ __('labels.language') }} <span class="text-danger">*</span></label>
@@ -63,9 +67,11 @@
                                 required
                             >
                                 <option value="">-- {{ __('labels.select_category') }} --</option>
-                                <option value="{{ $news->category_id }}" selected>
-                                    {{ $news->category->name }}
-                                </option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" @selected($selectedCategoryId === $category->id)>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
                             </select>
                             @error('category_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -149,7 +155,7 @@
                                 name="tags"
                                 data-role="tagsinput"
                                 placeholder="{{ __('labels.enter_tags_comma_separated') }}"
-                                value="{{ old('tags') }}"
+                                value="{{ old('tags', format_tags($news->tags)) }}"
                             >
                             @error('tags')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -194,13 +200,15 @@
                         <!-- Boolean Toggles -->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="custom-control custom-checkbox">                                    <input type="hidden" name="status" value="draft">                                    <input
+                                <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="status" value="draft">
+                                    <input
                                         type="checkbox"
                                         class="custom-control-input"
                                         id="status"
                                         name="status"
                                         value="published"
-                                        @checked($news->status == 'published')
+                                        @checked(old('status', $news->status) === 'published')
                                     >
                                     <label class="custom-control-label" for="status">
                                         {{ __('labels.publish_immediately') }}
@@ -219,7 +227,7 @@
                                         id="is_breaking_news"
                                         name="is_breaking_news"
                                         value="1"
-                                        @checked($news->is_breaking_news)
+                                        @checked(old('is_breaking_news', $news->is_breaking_news))
                                     >
                                     <label class="custom-control-label" for="is_breaking_news">
                                         {{ __('labels.breaking_news') }}
@@ -239,7 +247,7 @@
                                         id="show_at_slider"
                                         name="show_at_slider"
                                         value="1"
-                                        @checked($news->show_at_slider)
+                                        @checked(old('show_at_slider', $news->show_at_slider))
                                     >
                                     <label class="custom-control-label" for="show_at_slider">
                                         {{ __('labels.show_at_homepage_slider') }}
@@ -255,7 +263,7 @@
                                         id="show_at_popular"
                                         name="show_at_popular"
                                         value="1"
-                                        @checked($news->show_at_popular)
+                                        @checked(old('show_at_popular', $news->show_at_popular))
                                     >
                                     <label class="custom-control-label" for="show_at_popular">
                                         {{ __('labels.show_at_popular_section') }}
@@ -338,6 +346,8 @@
                 // AJAX fetch categories by language
                 $('#language').on('change', function() {
                     const language = $(this).val();
+                    const selectedCategoryId = Number(@json((int) old('category_id', $news->category_id)));
+
                     if (!language) {
                         $('#category_id').html('<option value="">-- Select Category --</option>');
                         return;
@@ -350,7 +360,7 @@
                         success: function(categories) {
                             let html = '<option value="">-- Select Category --</option>';
                             categories.forEach(cat => {
-                                const selected = cat.id === {{ $news->category_id }} ? 'selected' : '';
+                                const selected = Number(cat.id) === selectedCategoryId ? 'selected' : '';
                                 html += `<option value="${cat.id}" ${selected}>${cat.name}</option>`;
                             });
                             $('#category_id').html(html);

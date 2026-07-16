@@ -26,7 +26,7 @@ class AdminCategoryUpdateRequest extends FormRequest
 
         return [
             'language' => 'required|string|max:10',
-            'name' => 'required|string|max:255|unique:categories,name,' . $categoryId,
+            'name' => 'required|string|max:255|unique:categories,name,'.$categoryId,
             'show_at_navbar' => 'required|boolean',
             'status' => 'required|in:active,inactive',
         ];

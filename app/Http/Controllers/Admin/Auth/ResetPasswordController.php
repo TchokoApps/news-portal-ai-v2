@@ -24,7 +24,7 @@ class ResetPasswordController extends Controller
             ->where('remember_token', $request->token)
             ->first();
 
-        if (!$admin) {
+        if (! $admin) {
             return back()->withErrors(['email' => 'Invalid reset link or token expired.']);
         }
 

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Admin;
 use App\Models\Language;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -100,7 +101,7 @@ class LanguageControllerTest extends TestCase
             'status' => true,
         ]);
 
-        $response = $this->actingAsAdmin()->get('/admin/language/' . $language->id . '/edit');
+        $response = $this->actingAsAdmin()->get('/admin/language/'.$language->id.'/edit');
         $response->assertStatus(200);
         $response->assertViewIs('admin.language.edit');
         $response->assertViewHas('language');
@@ -120,7 +121,7 @@ class LanguageControllerTest extends TestCase
             'status' => true,
         ]);
 
-        $response = $this->actingAsAdmin()->put('/admin/language/' . $language->id, [
+        $response = $this->actingAsAdmin()->put('/admin/language/'.$language->id, [
             'code' => 'es',
             'name' => 'Spanish Updated',
             'slug' => 'es-updated',
@@ -150,7 +151,7 @@ class LanguageControllerTest extends TestCase
             'status' => true,
         ]);
 
-        $response = $this->actingAsAdmin()->delete('/admin/language/' . $language->id);
+        $response = $this->actingAsAdmin()->delete('/admin/language/'.$language->id);
 
         $response->assertJson(['success' => true]);
         $this->assertDatabaseMissing('languages', [
@@ -163,7 +164,7 @@ class LanguageControllerTest extends TestCase
      */
     protected function actingAsAdmin()
     {
-        $admin = \App\Models\Admin::create([
+        $admin = Admin::create([
             'name' => 'Test Admin',
             'email' => 'admin@test.com',
             'password' => bcrypt('password'),

@@ -21,7 +21,7 @@ class ForgotPasswordController extends Controller
     {
         $admin = Admin::where('email', $request->email)->first();
 
-        if (!$admin) {
+        if (! $admin) {
             return back()->withErrors(['email' => 'Email not found.']);
         }
 

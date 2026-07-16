@@ -32,13 +32,21 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::resource('admin-profile', ProfileController::class)->only(['index', 'update'])->names('admin.profile');
 
     // Category Resource Routes
+    Route::patch('/category/toggle-status-field', [CategoryController::class, 'toggleStatusField'])->name('category.toggle-status-field');
     Route::resource('category', CategoryController::class);
 
     // Language Resource Routes
+    Route::patch('/language/toggle-status-field', [LanguageController::class, 'toggleStatusField'])->name('language.toggle-status-field');
     Route::resource('language', LanguageController::class);
 
     // News Resource Routes - fetch-category must come BEFORE resource route
     Route::get('/news/fetch-category', [NewsController::class, 'fetchCategory'])->name('news.fetch-category');
+    Route::patch('/news/toggle-status-field', [NewsController::class, 'toggleStatusField'])->name('news.toggle-status-field');
+    Route::post('/news/{news}/toggle-breaking-news', [NewsController::class, 'toggleBreakingNews'])->name('news.toggle-breaking-news');
+    Route::post('/news/{news}/toggle-slider', [NewsController::class, 'toggleSlider'])->name('news.toggle-slider');
+    Route::post('/news/{news}/toggle-popular', [NewsController::class, 'togglePopular'])->name('news.toggle-popular');
+    Route::post('/news/{news}/toggle-status', [NewsController::class, 'toggleStatus'])->name('news.toggle-status');
+    Route::post('/news/{news}/clone', [NewsController::class, 'cloneNews'])->name('news.clone');
     Route::resource('news', NewsController::class);
 
     // Stub routes for sidebar testing

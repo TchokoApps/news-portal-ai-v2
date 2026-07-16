@@ -14,6 +14,7 @@ class AdminSendResetLinkMail extends Mailable
     use Queueable, SerializesModels;
 
     public $token;
+
     public $email;
 
     public function __construct($token, $email)

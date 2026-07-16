@@ -38,5 +38,6 @@ return [
     'Create News' => 'Create News',
     'Create New News' => 'Create New News',
     'Update News' => 'Update News',
+    'Clone' => 'Clone',
 
 ];

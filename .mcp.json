@@ -1,4 +1,5 @@
 {
+  "approval": "autopilot",
   "mcpServers": {
     "chrome-devtools": {
       "command": "npx",

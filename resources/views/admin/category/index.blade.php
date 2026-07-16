@@ -48,7 +48,7 @@
                                 role="tabpanel"
                                 aria-labelledby="tab-{{ $language->code }}"
                             >
-                                <div class="table-responsive mt-3">
+                                <div class="table-responsive mt-3 category-table-wrap">
                                     <table class="table table-striped data-table" id="table-{{ $language->code }}">
                                         <thead>
                                             <tr>
@@ -61,24 +61,34 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse($categories->where('language', $language->code) as $category)
+                                            @foreach($categories->where('language', $language->code) as $category)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $category->name }}</td>
                                                     <td>{{ $language->name }}</td>
                                                     <td>
-                                                        @if($category->show_at_navbar)
-                                                            <span class="badge badge-success">{{ __('labels.Yes') }}</span>
-                                                        @else
-                                                            <span class="badge badge-danger">{{ __('labels.No') }}</span>
-                                                        @endif
+                                                        <label class="custom-switch">
+                                                            <input
+                                                                type="checkbox"
+                                                                class="custom-switch-input toggle-category-status"
+                                                                data-id="{{ $category->id }}"
+                                                                data-field="show_at_navbar"
+                                                                @checked($category->show_at_navbar)
+                                                            >
+                                                            <span class="custom-switch-indicator"></span>
+                                                        </label>
                                                     </td>
                                                     <td>
-                                                        @if($category->status === 'active')
-                                                            <span class="badge badge-success">{{ __('labels.Active') }}</span>
-                                                        @else
-                                                            <span class="badge badge-danger">{{ __('labels.Inactive') }}</span>
-                                                        @endif
+                                                        <label class="custom-switch">
+                                                            <input
+                                                                type="checkbox"
+                                                                class="custom-switch-input toggle-category-status"
+                                                                data-id="{{ $category->id }}"
+                                                                data-field="status"
+                                                                @checked($category->status === 'active')
+                                                            >
+                                                            <span class="custom-switch-indicator"></span>
+                                                        </label>
                                                     </td>
                                                     <td>
                                                         <a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-info">
@@ -94,13 +104,7 @@
                                                         </button>
                                                     </td>
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="6" class="text-center text-muted py-4">
-                                                        {{ __('messages.no_categories_yet') }}
-                                                    </td>
-                                                </tr>
-                                            @endforelse
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -118,9 +122,119 @@
         @method('DELETE')
     </form>
 
+    @push('styles')
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
+        <style>
+            .category-table-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .category-table-wrap .data-table {
+                min-width: 860px;
+                width: 100% !important;
+            }
+
+            .category-table-wrap .data-table th,
+            .category-table-wrap .data-table td {
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+        </style>
+    @endpush
+
     @push('scripts')
+        <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+
         <script>
             $(document).ready(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                // Initialize DataTables for each language table.
+                $('.data-table').each(function() {
+                    if (!$.fn.DataTable.isDataTable(this)) {
+                        $(this).DataTable({
+                            order: [[0, 'asc']]
+                        });
+                    }
+                });
+
+                // Keep columns aligned after tab switch.
+                $(document).on('shown.bs.tab', '[data-toggle="tab"]', function() {
+                    $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+                });
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                $(document).on('change', '.toggle-category-status', function() {
+                    const toggle = $(this);
+                    const id = toggle.data('id');
+                    const field = toggle.data('field');
+                    const status = toggle.prop('checked') ? 1 : 0;
+                    const previousStatus = !toggle.prop('checked');
+
+                    toggle.prop('disabled', true);
+
+                    $.ajax({
+                        method: 'PATCH',
+                        url: "{{ route('category.toggle-status-field') }}",
+                        data: {
+                            id: id,
+                            field: field,
+                            status: status
+                        },
+                        success: function(response) {
+                            if (response.status !== 'success') {
+                                toggle.prop('checked', previousStatus);
+
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: response.message ?? 'Update failed.'
+                                });
+
+                                return;
+                            }
+
+                            if (response.data && typeof response.data.value !== 'undefined') {
+                                toggle.prop('checked', !!response.data.value);
+                            }
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message
+                            });
+                        },
+                        error: function(xhr) {
+                            toggle.prop('checked', previousStatus);
+
+                            const message = xhr.responseJSON?.message ?? 'Unable to update status.';
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: message
+                            });
+                        },
+                        complete: function() {
+                            toggle.prop('disabled', false);
+                        }
+                    });
+                });
+
                 // Delete button handler
                 $(document).on('click', '.delete-btn', function() {
                     const categoryId = $(this).data('id');

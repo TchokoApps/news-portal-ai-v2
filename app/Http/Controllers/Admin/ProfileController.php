@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminProfileUpdateRequest;
 use App\Traits\FileUploadTrait;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller

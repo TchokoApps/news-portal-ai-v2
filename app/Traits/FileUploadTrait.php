@@ -11,16 +11,15 @@ trait FileUploadTrait
     /**
      * Upload a file and return the path.
      *
-     * @param UploadedFile $file The file to upload
-     * @param string $uploadDir The directory to store files (e.g., 'uploads/profiles')
-     * @param string|null $oldPath The path of the old file to delete (optional)
-     *
+     * @param  UploadedFile  $file  The file to upload
+     * @param  string  $uploadDir  The directory to store files (e.g., 'uploads/profiles')
+     * @param  string|null  $oldPath  The path of the old file to delete (optional)
      * @return string|null The path to the uploaded file, or null if file is invalid
      */
     public function uploadFile(UploadedFile $file, string $uploadDir, ?string $oldPath = null): ?string
     {
         // Validate that the file is valid
-        if (!$file->isValid()) {
+        if (! $file->isValid()) {
             return null;
         }
 
@@ -31,29 +30,29 @@ trait FileUploadTrait
 
         // Create the upload directory if it doesn't exist
         $uploadPath = public_path($uploadDir);
-        if (!File::isDirectory($uploadPath)) {
+        if (! File::isDirectory($uploadPath)) {
             File::makeDirectory($uploadPath, 0755, true, true);
         }
 
         // Generate a unique filename
-        $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
+        $filename = Str::random(20).'.'.$file->getClientOriginalExtension();
 
         // Move the file to the upload directory
         $file->move($uploadPath, $filename);
 
         // Return the path relative to public directory
-        return $uploadDir . '/' . $filename;
+        return $uploadDir.'/'.$filename;
     }
 
     /**
      * Delete a file if it exists.
      *
-     * @param string|null $filePath The path to the file (relative to public directory)
+     * @param  string|null  $filePath  The path to the file (relative to public directory)
      * @return bool True if deleted, false otherwise
      */
     public function deleteFile(?string $filePath): bool
     {
-        if (!$filePath || !File::exists(public_path($filePath))) {
+        if (! $filePath || ! File::exists(public_path($filePath))) {
             return false;
         }
 

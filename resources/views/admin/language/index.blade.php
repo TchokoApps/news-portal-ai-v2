@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive language-table-wrap">
                         <table class="table table-striped data-table" id="languageTable">
                             <thead>
                                 <tr>
@@ -33,25 +33,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($languages as $language)
+                                @foreach($languages as $language)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $language->name }}</td>
                                         <td><code>{{ $language->code ?? $language->lang }}</code></td>
                                         <td><code>{{ $language->slug }}</code></td>
                                         <td>
-                                            @if($language->default)
-                                                <span class="badge badge-success">Default</span>
-                                            @else
-                                                <span class="badge badge-secondary">No</span>
-                                            @endif
+                                            <label class="custom-switch">
+                                                <input
+                                                    type="checkbox"
+                                                    class="custom-switch-input toggle-language-status"
+                                                    data-id="{{ $language->id }}"
+                                                    data-field="default"
+                                                    @checked($language->default)
+                                                >
+                                                <span class="custom-switch-indicator"></span>
+                                            </label>
                                         </td>
                                         <td>
-                                            @if($language->status)
-                                                <span class="badge badge-success">Active</span>
-                                            @else
-                                                <span class="badge badge-danger">Inactive</span>
-                                            @endif
+                                            <label class="custom-switch">
+                                                <input
+                                                    type="checkbox"
+                                                    class="custom-switch-input toggle-language-status"
+                                                    data-id="{{ $language->id }}"
+                                                    data-field="status"
+                                                    @checked($language->status)
+                                                >
+                                                <span class="custom-switch-indicator"></span>
+                                            </label>
                                         </td>
                                         <td>
                                             <a href="{{ route('language.edit', $language->id) }}" class="btn btn-sm btn-info">
@@ -67,13 +77,7 @@
                                             </button>
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center text-muted py-4">
-                                            No languages found. <a href="{{ route('language.create') }}">Create one now!</a>
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -84,31 +88,122 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
+    <style>
+        .language-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .language-table-wrap .data-table {
+            min-width: 900px;
+            width: 100% !important;
+        }
+
+        .language-table-wrap .data-table th,
+        .language-table-wrap .data-table td {
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+    </style>
 @endpush
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
 
     <script>
         $(function() {
-            $('#languageTable').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "pageLength": 10,
-                "language": {
-                    "search": "Search languages:",
-                    "lengthMenu": "Show _MENU_ entries"
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+
+            if (!$.fn.DataTable.isDataTable('#languageTable')) {
+                $('#languageTable').DataTable({
+                    paging: true,
+                    lengthChange: true,
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    autoWidth: false,
+                    pageLength: 10,
+                    language: {
+                        search: 'Search languages:',
+                        lengthMenu: 'Show _MENU_ entries'
+                    }
+                });
+            }
+
+            $(document).on('change', '.toggle-language-status', function() {
+                const toggle = $(this);
+                const id = toggle.data('id');
+                const field = toggle.data('field');
+                const status = toggle.prop('checked') ? 1 : 0;
+                const previousStatus = !toggle.prop('checked');
+
+                toggle.prop('disabled', true);
+
+                $.ajax({
+                    method: 'PATCH',
+                    url: "{{ route('language.toggle-status-field') }}",
+                    data: {
+                        id: id,
+                        field: field,
+                        status: status
+                    },
+                    success: function(response) {
+                        if (response.status !== 'success') {
+                            toggle.prop('checked', previousStatus);
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: response.message ?? 'Update failed.'
+                            });
+
+                            return;
+                        }
+
+                        if (response.data && typeof response.data.value !== 'undefined') {
+                            toggle.prop('checked', !!response.data.value);
+                        }
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                    },
+                    error: function(xhr) {
+                        toggle.prop('checked', previousStatus);
+
+                        const message = xhr.responseJSON?.message ?? 'Unable to update status.';
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: message
+                        });
+                    },
+                    complete: function() {
+                        toggle.prop('disabled', false);
+                    }
+                });
+            });
+
             // Delete button handler
-            $('.delete-btn').on('click', function() {
+            $(document).on('click', '.delete-btn', function() {
                 const languageId = $(this).data('id');
                 const languageName = $(this).data('name');
 
@@ -126,9 +221,6 @@
                         $.ajax({
                             url: '/admin/language/' + languageId,
                             type: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
                             success: function(response) {
                                 if (response.success) {
                                     Swal.fire({
@@ -142,7 +234,7 @@
                                     });
                                 }
                             },
-                            error: function(error) {
+                            error: function() {
                                 Swal.fire({
                                     title: 'Error!',
                                     text: 'Failed to delete language',

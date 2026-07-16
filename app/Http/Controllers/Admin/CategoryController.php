@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCategoryCreateRequest;
+use App\Http\Requests\AdminCategoryToggleStatusRequest;
 use App\Http\Requests\AdminCategoryUpdateRequest;
 use App\Models\Category;
 use App\Models\Language;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -28,6 +30,7 @@ class CategoryController extends Controller
     public function create()
     {
         $languages = Language::all();
+
         return view('admin.category.create', compact('languages'));
     }
 
@@ -53,6 +56,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $languages = Language::all();
+
         return view('admin.category.edit', compact('category', 'languages'));
     }
 
@@ -70,6 +74,39 @@ class CategoryController extends Controller
 
         return redirect()->route('category.index')
             ->with('success', __('messages.category_updated_successfully'));
+    }
+
+    /**
+     * Toggle supported category status fields via AJAX.
+     */
+    public function toggleStatusField(AdminCategoryToggleStatusRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $category = Category::findOrFail($validated['id']);
+
+        $field = $validated['field'];
+        $status = (bool) $validated['status'];
+
+        if ($field === 'status') {
+            $category->setAttribute('status', $status ? 'active' : 'inactive');
+            $savedValue = $category->status;
+        } else {
+            $category->setAttribute($field, $status);
+            $savedValue = (bool) $category->getAttribute($field);
+        }
+
+        $category->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('messages.updated_successfully'),
+            'data' => [
+                'id' => $category->id,
+                'field' => $field,
+                'value' => $field === 'status' ? ($savedValue === 'active') : $savedValue,
+            ],
+        ]);
     }
 
     /**

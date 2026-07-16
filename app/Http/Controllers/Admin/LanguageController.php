@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminLanguageStoreRequest;
+use App\Http\Requests\AdminLanguageToggleStatusRequest;
 use App\Http\Requests\AdminLanguageUpdateRequest;
 use App\Models\Language;
-use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
 
 class LanguageController extends Controller
 {
@@ -16,6 +17,7 @@ class LanguageController extends Controller
     public function index()
     {
         $languages = Language::orderByDesc('created_at')->get();
+
         return view('admin.language.index', compact('languages'));
     }
 
@@ -25,6 +27,7 @@ class LanguageController extends Controller
     public function create()
     {
         $availableLanguages = config('language');
+
         return view('admin.language.create', compact('availableLanguages'));
     }
 
@@ -36,7 +39,7 @@ class LanguageController extends Controller
         $validated = $request->validated();
 
         // Add lang field from code if not already set
-        if (!isset($validated['lang']) || empty($validated['lang'])) {
+        if (! isset($validated['lang']) || empty($validated['lang'])) {
             $validated['lang'] = $validated['code'];
         }
 
@@ -52,6 +55,7 @@ class LanguageController extends Controller
     public function edit(Language $language)
     {
         $availableLanguages = config('language');
+
         return view('admin.language.edit', compact('language', 'availableLanguages'));
     }
 
@@ -63,7 +67,7 @@ class LanguageController extends Controller
         $validated = $request->validated();
 
         // Add lang field from code if not already set
-        if (!isset($validated['lang']) || empty($validated['lang'])) {
+        if (! isset($validated['lang']) || empty($validated['lang'])) {
             $validated['lang'] = $validated['code'];
         }
 
@@ -74,12 +78,39 @@ class LanguageController extends Controller
     }
 
     /**
+     * Toggle supported language status fields via AJAX.
+     */
+    public function toggleStatusField(AdminLanguageToggleStatusRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $language = Language::findOrFail($validated['id']);
+
+        $field = $validated['field'];
+        $status = (bool) $validated['status'];
+
+        $language->setAttribute($field, $status);
+        $language->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('messages.updated_successfully'),
+            'data' => [
+                'id' => $language->id,
+                'field' => $field,
+                'value' => (bool) $language->getAttribute($field),
+            ],
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Language $language)
     {
         try {
             $language->delete();
+
             return response()->json([
                 'success' => true,
                 'message' => __('messages.language_deleted_successfully'),
